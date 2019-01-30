@@ -1,0 +1,197 @@
+# -*- mode:org; fill-column:79; -*-
+#+TITLE:Stripe Payments Integration 101
+#+AUTHOR:Roland Szőke
+#+DATE:January 29, 2019
+
+* Introduction
+
+  In this article, I’ll show how you can create a simple webshop using
+  Stripe Payments integration, React and Express. We'll get familiar
+  with the Stripe Dashboard and basic Stripe features such as charges,
+  customers, orders, coupons and so on. Also, you will learn about the
+  usage of webhooks and restricted API keys.
+
+** About The Author
+
+   #+CINDEX:author, about
+   A little bit about my Stripe experience and the reasons for writing
+   this tutorial: At [[https://risingstack.com/][RisingStack]] we’ve been working with a client from
+   the US healthcare scene who hired us to create a large-scale
+   webshop they can use to sell their products. During the creation of
+   this Stripe based platform, we spent a lot of time with studying
+   the documentation and figuring out the integration. Not because it
+   is hard, but there's a certain amount of Stripe related knowledge
+   that you'll need to internalize.
+
+** About the Project
+
+   #+CINDEX:project
+   #+CINDEX:frontend, github
+   #+CINDEX:backend, github
+   We'll build an example app in this tutorial together---so you can
+   learn how to create a Stripe Webshop from the ground up! The
+   example app's frontend can be found at
+   https://github.com/RisingStack/post-stripe , and its backend at
+   https://github.com/RisingStack/post-stripe-api.
+
+   I’ll use code samples from these repo’s in the article below.
+
+* The Basics of Stripe Payments Integration
+
+  #+CINDEX:Stripe, what it is
+  First of all, what is the promise of Stripe? It is basically a
+  payment provider: you set up your account, integrate it into your
+  application and let the money rain. Pretty simple right? Well, let
+  your finance people decide if it is a good provider or not based on
+  the plans they offer.
+
+  To show you how to use Stripe, we’ll build a simple demo application
+  with it together.
+
+** Stripe Setup and Dashboard
+
+   #+CINDEX:Stripe account, setup
+   Before we start coding, we need to create a Stripe account. Don't
+   worry, no credit card is required in this stage. You only need to
+   provide a payment method when you attempt to activate your account.
+
+*** Signup To Stripe
+
+    #+CINDEX:Stripe dashboard
+    #+CINDEX:dashboard
+    #+CINDEX:Stripe signup
+    #+CINDEX:signup
+    Go straight to the [[https://dashboard.stripe.com/login][Stripe Dashboard]] and hit that *Sign up*
+    button. Email, name, password... the usual. BOOM! You have a
+    dashboard. You can create, manage and keep track of orders,
+    payment flow, customers... so basically everything you want to
+    know regarding your shop is here.
+
+*** Create a New Coupon or Product
+
+    If you want to create a new coupon or product, you only need to
+    click a few buttons or enter a simple curl command to your
+    terminal, as the [[https://stripe.com/docs/api][Stripe API Doc]] describes.
+
+*** Integrate Stripe Into a Product
+
+    #+CINDEX:Stripe product integration
+    #+CINDEX:integrate Stripe
+    #+CINDEX:@file{Stripe.js}
+    Of course, you can integrate Stripe into your product so your
+    admins can set them up from your UI, and then integrate and expose
+    it to your customers using [[https://github.com/stripe/stripe-node][Stripe.js]].
+
+*** Stripe Developers Section
+
+    #+CINDEX:Developers section
+    #+CINDEX:dashboard
+    #+CINDEX:webhook
+    #+CINDEX:API
+    #+CINDEX:api keys
+    Another important menu on the dashboard is the *Developers*
+    section, where we will add our first /webhook/ and create our
+    /restricted API keys/. We will get more familiar with the
+    dashboard and the API while we implement our demo shop below.
+
+    #+ATTR_HTML: :width 75%
+    #+ATTR_TEXINFO: :alt Stripe Dashboard :width 6in
+    #+NAME:fig:stripe-dashboard
+    #+CAPTION: The Initial Stripe Dashboard View
+    [[file:img/stripe-payments-integration-dashboard.png]]
+
+* Creating a Webshop in React with Charges
+
+  #+CINDEX:webshop creation
+  Let’s create a React webshop with two products: a Banana and
+  Cucumber. What else would you want to buy in a webshop anyways,
+  right?
+
+** Steps for Creating a Webshop
+
+    #+CINDEX:create-react-app
+    #+CINDEX:axios
+    #+CINDEX:query-string-object
+    #+CINDEX:convert objects to query strings
+    #+CINDEX:Stripe requests
+    #+CINDEX:React Stripe Elements
+    #+CINDEX:@file{Stripe.js}
+    #+CINDEX:Stripe Elements
+    #+CINDEX:credit card, secure inputs
+    #+CINDEX:tokenization, credit card data
+  - We can use [[https://github.com/facebook/create-react-app][Create React App]] to get started.
+  - We're going to use [[https://github.com/axios/axios][Axios]] for HTTP requests;
+  - and [[https://www.npmjs.com/package/query-string-object][query-string-object]] to convert objects to query strings for
+    Stripe requests.
+  - We will also need [[https://github.com/stripe/react-stripe-elements][React Stripe Elements]], which is a React wrapper
+    for Stripe.js and Stripe Elements. It adds secure credit card
+    inputs and sends the card's data for tokenization to the Stripe
+    API.
+
+    *WARNING:* You should never send raw credit card details to your
+    own API, but let Stripe handle the credit card security for you.
+
+    #+CINDEX: token, from Stripe
+    You will be able to identify the card provided by the user using
+    the token you got from Stripe.
+
+** Terminal Commands To Build the React App
+
+    #+BEGIN_SRC bash -n
+    npx create-react-app webshop
+    cd webshop
+    npm install --save react-stripe-elements
+    npm install --save axios
+    npm install --save query-string-object
+    #+END_SRC
+
+    After we’re done with the preparations, we have to include
+    @@texinfo:@file{@@Stripe.js@@texinfo:}@@ in our application.
+    Just add
+    #+BEGIN_EXAMPLE
+    <script src="https://js.stripe.com/v3/"></script>
+    #+END_EXAMPLE
+    to the head of your @@texinfo:@file{@@index.html@@texinfo:}@@.
+
+* COPYING INFO
+  :PROPERTIES:
+  :COPYING:
+  :END:
+
+  #+BEGIN_VERSE
+  {{{title}}} {{{author}}} {{{date}}}
+  \copy 2019
+  #+END_VERSE
+
+* LIST OF FIGURES
+  :PROPERTIES:
+  :UNNUMBERED:
+  :END:
+  #+TEXINFO: @listoffloats Figure
+* INDEX
+  :PROPERTIES:
+  :INDEX:    cp
+  :END:
+* MACRO SETUP                                                      :noexport:
+#+MACRO: VERSION Version 0.0.1
+#+MACRO: CREATE-DATE Created 2019-01-30 Wed 11:53
+* TEXINFO EXPORT SETUP                                             :noexport:
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+OPTIONS: author:t broken-links:nil c:nil creator:nil
+#+OPTIONS: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t
+#+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+OPTIONS: timestamp:t title:t toc:t todo:t |:t
+#+LANGUAGE: en
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 26.1 (Org mode 9.1.14)
+#+TEXINFO_FILENAME:stripe-react.info
+#+TEXINFO_CLASS: info
+#+TEXINFO_HEADER:
+#+TEXINFO_POST_HEADER:
+#+SUBTITLE:/For JavaScript Developers/ --- {{{VERSION}}} {{{CREATE-DATE}}}
+#+SUBAUTHOR:
+#+TEXINFO_DIR_CATEGORY:WebDev
+#+TEXINFO_DIR_TITLE:Stripe Integration 101
+#+TEXINFO_DIR_DESC:How to create a webshop using Stripe
+#+TEXINFO_PRINTED_TITLE:Stripe Payments Integration 101
