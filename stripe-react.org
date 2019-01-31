@@ -128,12 +128,19 @@
     inputs and sends the card's data for tokenization to the Stripe
     API.
 
-    *WARNING:* You should never send raw credit card details to your
-    own API, but let Stripe handle the credit card security for you.
 
-    #+CINDEX: token, from Stripe
-    You will be able to identify the card provided by the user using
-    the token you got from Stripe.
+  *WARNING:* You should never send raw credit card details to your
+  own API, but let Stripe handle the credit card security for you.
+
+  #+CINDEX: token, from Stripe
+  You will be able to identify the card provided by the user using
+  the token you got from Stripe.
+
+  #+ATTR_HTML: :width 75%
+  #+ATTR_TEXINFO: :alt Stripe Dashboard API Key :width 6in
+  #+NAME: fig:stripe-api
+  #+CAPTION: Stripe Payments Dashboard API Key
+  [[file:img/stripe-payments-dashboard-api-key.png]]
 
 ** Terminal Commands To Build the React App
 
@@ -146,12 +153,65 @@
     #+END_SRC
 
     After we’re done with the preparations, we have to include
-    @@texinfo:@file{@@Stripe.js@@texinfo:}@@ in our application.
-    Just add
-    #+BEGIN_EXAMPLE
-    <script src="https://js.stripe.com/v3/"></script>
-    #+END_EXAMPLE
-    to the head of your @@texinfo:@file{@@index.html@@texinfo:}@@.
+    {{{file(Stripe.js)}}} in our application.  Just add ~<script
+    src="https://js.stripe.com/v3/"></script>~ to the head of your
+    {{{file(index.html)}}}.
+
+** Coding the App
+
+*** Root React Component {{{file(App.js)}}}
+
+    #+CINDEX:StripeProvider component
+    #+CINDEX:~react-stripe-elements~
+    #+CINDEX:root react component
+    #+CINDEX:@file{App.js}
+    First, we have to add a ~<StripeProvider/>~ from
+    ~react-stripe-elements~ to our root React App component.
+
+    #+CINDEX:Stripe object
+    #+CINDEX:props
+    #+CINDEX:public access key
+    #+CINDEX:access key, public
+    #+CINDEX:key, public access
+    #+CINDEX:@code{apiKey}
+    #+CINDEX:Dashboard
+    #+CINDEX:Developers section, Dashboard
+    #+CINDEX:API keys
+    #+CINDEX:Dashboard menu
+    #+CINDEX:Publishable key
+    This will give us access to the [[https://stripe.com/docs/stripe-js/reference#the-stripe-object][Stripe object]].  In the props, we
+    should pass a public access key (~apiKey~) which is found in the
+    dashboard's *Developers* section under the /API keys/ menu as
+    /Publishable key/. ([[fig:stripe-api]])
+
+    #+NAME:code:stripeprovider
+    #+CAPTION:~StripeProvider~ Component in Root Component
+   #+BEGIN_SRC javascript -n
+   // App.js
+   import React from 'react'
+   import {StripeProvider, Elements} from 'react-stripe-elements'
+   import Shop from './Shop'
+
+   const App = () => {
+     return (
+       <StripeProvider apiKey="pk_test_xxxxxxxxxxxxxxxxxxxxxxxx">
+         <Elements>
+           <Shop/>
+         </Elements>
+       </StripeProvider>
+     )
+   }
+   #+END_SRC
+
+   The ~<Shop/>~ is the implementation of our shop form as you can see
+   from ~import Shop from './Shop'~.  We'll go into the details later.
+
+*** Implementation of {{{file(Shop.js)}}}
+
+   As you can see the ~<Shop/>~ is wrapped in ~<Elements>~ imported
+   from {{{file(react-stripe-elements)}}} so that you can use
+   ~injectStripe~ in your components. To shed some light on this,
+   let's take a look at our implementation in {{{file(Shop.js)}}}.
 
 * COPYING INFO
   :PROPERTIES:
@@ -168,13 +228,20 @@
   :UNNUMBERED:
   :END:
   #+TEXINFO: @listoffloats Figure
+
+* LIST OF CODE FRAGMENTS
+  :PROPERTIES:
+  :UNNUMBERED:
+  :END:
+  #+TEXINFO: @listoffloats Listing
 * INDEX
   :PROPERTIES:
   :INDEX:    cp
   :END:
 * MACRO SETUP                                                      :noexport:
-#+MACRO: VERSION Version 0.0.1
-#+MACRO: CREATE-DATE Created 2019-01-30 Wed 11:53
+#+MACRO: VERSION Version 0.0.2
+#+MACRO: CREATE-DATE Created 2019-01-30 Wed 16:39
+#+MACRO: file @@texinfo:@file{@@$1@@texinfo:}@@
 * TEXINFO EXPORT SETUP                                             :noexport:
 #+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
 #+OPTIONS: author:t broken-links:nil c:nil creator:nil
