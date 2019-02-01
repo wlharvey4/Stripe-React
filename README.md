@@ -8,9 +8,9 @@
   ## Outlined and Indexing
 
   I have taken that article and outlined and indexed it into a Texinfo
-  form using Emacs Orgmode, leaving most of the content unchanged.  I
-  have provided an Info document, a PDF document, and an HTML document
-  for reference.
+  source file using Emacs Orgmode, leaving most of the content
+  unchanged.  I have provided an Info document, a PDF document, and an
+  HTML document for reference in the alternate branch `compilations`.
 
   ## Create a Working Version
   The next step is to create a single source Orgmode document that
