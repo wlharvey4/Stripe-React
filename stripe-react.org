@@ -464,6 +464,7 @@ export default injectStripe(Shop)
     #+CINDEX:credit card, charge
     #+CINDEX:@file{axios}
     #+CINDEX:post, axios
+    #+CINDEX:@code{props.stripe.createToken()}
     #+BEGIN_SRC js -n
 // Shop.js
 // ...
@@ -508,13 +509,17 @@ class Shop extends Component {
 }
     #+END_SRC
 
+    #+CINDEX:testing
+    #+CINDEX:international cards
     For testing purposes you can use these [[https://stripe.com/docs/testing#international-cards][international cards]] provided by Stripe.
 
-    Looks good, we can already create tokens from cards and charge
-    them, but how should we know who bought what and where should we
-    send the package?  Thats where products and orders come in.
-
 * Placing an Order With Stripe
+
+  #+CINDEX:products and orders
+  #+CINDEX:orders and products
+  Looks good; we can already create tokens from cards and charge them,
+  but how should we know who bought what and where should we send the
+  package?  Thats where products and orders come in.
 
   #+CINDEX:order, create
   #+CINDEX:server, set up
@@ -677,16 +682,24 @@ app.post('/api/shop/order', async (req, res) => {
 
     #+CINDEX:state, implement Shop Component
     #+CINDEX:object, state
+    #+CINDEX:Stripe API
+    #+CINDEX:API
+    #+CINDEX:Shop component
+    #+CINDEX:Shop object
     First, let's implement the state of the ~<Shop/>~ as an object the
     Stripe API expects.
 
-    #+CINDEX:order request, should look
+    #+CINDEX:order request, should look like
+    #+CINDEX:address object
+    #+CINDEX:fields, address object
+    #+CINDEX:coupon
     You can find out how an order request should look like [[https://stripe.com/docs/api/orders/create][here]]. We'll
     need an =address= object with =line1=, =city=, =state=, =country=,
     =postal_code= fields, a =name=, an =email= and a =coupon= field,
     to get our customers ready for coupon hunting.
 
-  #+BEGIN_SRC js -n
+    #+PINDEX:Shop.js
+    #+BEGIN_SRC js -n
 // Shop.js
 class Shop extends Component {
   constructor(props) {
@@ -708,7 +721,7 @@ class Shop extends Component {
         postal_code: ''
       }
     }
-    this.handleCartChange = this.handleCartChange.bind(this)
+    this.handleCartChange = this.handleCartChange.bindthis)
     this.handleCartReset = this.handleCartReset.bind(this)
     this.handleAddressChange = this.handleAddressChange.bind(this)
     this.handleChange = this.handleChange.bind(this)
@@ -728,13 +741,18 @@ class Shop extends Component {
   }
   // ...
 }
-  #+END_SRC
+    #+END_SRC
 
-  Now we are ready to create the input fields. We should, of course,
-  disable the submit button when the input fields are empty. Just the
-  usual deal.
+*** Create Input Fields
 
-  #+BEGIN_SRC js -n
+    #+CINDEX:input fields, create
+    #+CINDEX:submit button, disable
+    Now we are ready to create the input fields. We should, of course,
+    disable the submit button when the input fields are empty. Just
+    the usual deal.
+
+    #+PINDEX:Shop.js
+    #+BEGIN_SRC js -n
 // Shop.js
 render () {
   const state = this.state
@@ -788,46 +806,73 @@ render () {
       ? <button type="submit" disabled={!submittable}>Purchase</button>
       : 'Purchasing...'}
 // ...
-  #+END_SRC
+    #+END_SRC
 
-  We also have to define purchasable items.  These items will be
-  identified by a [[https://en.wikipedia.org/wiki/Stock_keeping_unit][Stock Keeping Unit]] by Stripe, which can be created
-  on the dashboard as well.
+    #+CINDEX:purchasable items, define
+    #+CINDEX:Stock Keeping Unit (SKU)
+    #+CINDEX:SKU, define in Stripe
+    #+CINDEX:Dashboard, define SKU in Stripe
+    We also have to define purchasable items.  These items will be
+    identified by a [[https://en.wikipedia.org/wiki/Stock_keeping_unit][Stock Keeping Unit]] by Stripe, which can be created
+    on the dashboard as well.
 
-  First, we have to create the Products (=Banana= and =Cucumber= on
-  =dashboard->Orders->Products=) and then assign an SKU to them (click
-  on the created product and =Add SKU= in the *Inventory* group). An SKU
-  specifies the products including its properties - size, color,
-  quantity, and prices -, so a product can have multiple SKUs.
+*** Create Products and Assign SKUs
 
-  #+ATTR_HTML: :width 75%
-  #+ATTR_TEXINFO: :width 6in
-  #+NAME:fig:create-products
-  #+CAPTION:Create a Product
-  [[file:img/stripe-payments-dashboard-banana-product-creation.png]]
+    #+CINDEX:products, create
+    #+CINDEX:SKU, assign
+    #+CINDEX:Inventory group
+    #+CINDEX:Dashboard
+    First, we have to create the Products (=Banana= and =Cucumber= on
+    =dashboard->Orders->Products=) and then assign an SKU to them
+    (click on the created product and =Add SKU= in the *Inventory*
+    group). An SKU specifies the products including its properties -
+    size, color, quantity, and prices -, so a product can have
+    multiple SKUs.
 
-  #+ATTR_HTML: :width 75%
-  #+ATTR_TEXINFO: :width 6in
-  #+NAME:fig:create-sku
-  #+CAPTION:Create a SKU
-  [[file:img/Stripe-Payments-Dashboard-Stock-Keeping-Unit.png]]
+    #+ATTR_HTML: :width 75%
+    #+ATTR_TEXINFO: :width 6in
+    #+NAME:fig:create-products
+    #+CAPTION:Create a Product
+    [[file:img/stripe-payments-dashboard-banana-product-creation.png]]
 
-  After we created our products and assigned SKUs to them, we add them
-  to the webshop so we can parse up the order.
+    #+ATTR_HTML: :width 75%
+    #+ATTR_TEXINFO: :width 6in
+    #+NAME:fig:create-sku
+    #+CAPTION:Create a SKU
+    [[file:img/Stripe-Payments-Dashboard-Stock-Keeping-Unit.png]]
 
-  #+BEGIN_SRC js -n
+*** Add Products to the Webshop
+
+    #+CINDEX:Webshop, add products to
+    #+CINDEX:parse order
+    #+CINDEX:order, parse
+    After we created our products and assigned SKUs to them, we add
+    them to the webshop so we can parse up the order.
+
+    #+PINDEX:Shop.js
+    #+BEGIN_SRC js -n
 // Shop.js
 const skus = {
   banana: 1,
   cucumber: 2
 }
-  #+END_SRC
+    #+END_SRC
 
-  We are ready to send orders to our express API on submit. We do not
-  have to calculate the total price of orders from now on. Stripe can
-  sum it up for us, based on the SKUs, quantities, and coupons.
+*** Send Orders to Stripe API on Submit
 
-  #+BEGIN_SRC js -n
+    #+CINDEX:orders, send
+    #+CINDEX:send orders
+    #+CINDEX:API, send orders to
+    #+CINDEX:total price of orders, automatic calculation
+    We are ready to send orders to our express API on submit. We do
+    not have to calculate the total price of orders from now
+    on. Stripe can sum it up for us, based on the SKUs, quantities,
+    and coupons.
+
+    #+PINDEX:Shop.js
+    #+CINDEX:post, axios
+    #+CINDEX:order, send in code
+    #+BEGIN_SRC js -n
 // Shop.js
 handleSubmit(evt) {
   evt.preventDefault()
@@ -872,89 +917,137 @@ handleSubmit(evt) {
     console.log(error)
   })
 }
-  #+END_SRC
+    #+END_SRC
 
-  Let's create a coupon for testing purposes. This can be done on the
-  dashboard as well. You can find this option under the *Billing* menu
-  on the *Coupons* tab.
+*** Create a Coupon for Testing
 
-  There are multiple types of coupons based on their duration, but
-  only coupons with the type /Once/ can be used for orders. The rest of
-  the coupons can be attached to Stripe Customers.
+    #+CINDEX:coupon, create
+    #+CINDEX:testing
+    #+CINDEX:Dashboard
+    #+CINDEX:Billing menu, Dashboard
+    #+CINDEX:Coupons tab, Dashboard
+    Let's create a coupon for testing purposes. This can be done on
+    the dashboard as well. You can find this option under the
+    *Billing* menu on the *Coupons* tab.
 
-  You can also specify a lot of parameters for the coupon you create,
-  such as how many times it can be used, whether it is amount based or
-  percentage based, and when will the coupon expire. Now we need a
-  coupon that can be used only once and provides a reduction on the
-  price by a certain amount.
+    #+CINDEX:coupons, multiple types
+    #+CINDEX:coupons, duration
+    #+CINDEX:coupons, attached to Customers
+    There are multiple types of coupons based on their duration, but
+    only coupons with the type /Once/ can be used for orders. The rest
+    of the coupons can be attached to Stripe Customers.
 
-  #+ATTR_HTML: :width 75%
-  #+ATTR_TEXINFO: :width 6in
-  #+NAME:fig:coupon
-  #+CAPTION:Dashboard Coupon Creation
-  [[file:img/Stripe-Payments-Dashboard-Coupon-Creation.png]]
+    #+CINDEX:coupon, parameters
+    You can also specify a lot of parameters for the coupon you
+    create, such as how many times it can be used, whether it is
+    amount based or percentage based, and when will the coupon
+    expire. Now we need a coupon that can be used only once and
+    provides a reduction on the price by a certain amount.
 
-  Great! Now we have our products, we can create orders, and we can
-  also ask Stripe to charge the customer's card for us. But we are
-  still not ready to ship the products as we have no idea at the
-  moment whether the charge was successful. To get that information,
-  we need to set up /webhooks/, so Stripe can let us know when the money
-  is on its way.
+    #+ATTR_HTML: :width 75%
+    #+ATTR_TEXINFO: :width 6in
+    #+NAME:fig:coupon
+    #+CAPTION:Dashboard Coupon Creation
+    [[file:img/Stripe-Payments-Dashboard-Coupon-Creation.png]]
 
-  #+ATTR_HTML: :width 75%
-  #+ATTR_TEXINFO: :width 6in
-  #+NAME:fig:orders
-  #+CAPTION:Stripe Payments Shop Orders
-  [[file:img/Stripe-Payments-Shop-Orders.png]]
+    #+CINDEX:webhooks, set up
+    Great! Now we have our products, we can create orders, and we can
+    also ask Stripe to charge the customer's card for us. But we are
+    still not ready to ship the products as we have no idea at the
+    moment whether the charge was successful. To get that information,
+    we need to set up /webhooks/, so Stripe can let us know when the
+    money is on its way.
+
+    #+ATTR_HTML: :width 75%
+    #+ATTR_TEXINFO: :width 6in
+    #+NAME:fig:orders
+    #+CAPTION:Stripe Payments Shop Orders
+    [[file:img/Stripe-Payments-Shop-Orders.png]]
 
 * Setting up Stripe Webhooks to Verify Payments
 
+  #+CINDEX:Source, assigned to customers
+  #+CINDEX:Stripe payment methods
+  #+CINDEX:payment methods, several on Stripe
   As we discussed earlier, we are not assigning cards but Sources to
   Customers. The reason behind that is Stripe is capable of using
   [[https://stripe.com/docs/sources][several payment methods]], some of which may take days to be verified.
 
+  #+CINDEX:endpoint for Stripe to call on event
+  #+CINDEX:webhooks, usefulness
   We need to set up an endpoint Stripe can call when an event --- such
   as a successful payment --- has happened. Webhooks are also useful
   when an event is not initiated by us via calling the API, but comes
   straight from Stripe.
 
+  #+CINDEX:subscription service
+  #+CINDEX:recurring payments, webhook for
+  #+CINDEX:webhook for recurring payment
   Imagine that you have a subscription service, and you don't want to
   charge the customer every month. In this case, you can set up a
   webhook, and you will get notified when the recurring payment was
   successful or if it failed.
 
-  In this example, we only want to be notified when an order gets
-  paid. When it happens, Stripe can notify us by calling an endpoint
-  on our API with an HTTP request containing the payment data in the
-  request body. At the moment, we don't have a static IP, but we need
-  a way to expose our local API to the public internet. We can use
-  [[https://ngrok.com/download][Ngrok]] for that. Just download it and run with ~./ngrok http 3001~
-  command to get an ngrok url pointing to our ~localhost:3001~.
+** Webhook Notification When Order Gets Paid
 
-  We also have to set up our webhook on the Stripe dashboard. Go to
-  *Developers -> Webhooks*, click on =Add endpoint= and type in your
-  ngrok url followed by the endpoint to be called
-  e.g. =http://92832de0.ngrok.io/api/shop/order/process=. Then under
-  *Filter event* select =Select types to send= and search for
-  ~order.payment_succeeded~.
+   #+CINDEX:notification upon payment, webhook for
+   #+CINDEX:webhook for notification of payment
+   #+CINDEX:API endpoint for webhook notification
+   #+CINDEX:ngrok service
+   #+CINDEX:static ip, ngrok
+   In this example, we only want to be notified when an order gets
+   paid. When it happens, Stripe can notify us by calling an endpoint
+   on our API with an HTTP request containing the payment data in the
+   request body. At the moment, we don't have a static IP, but we need
+   a way to expose our local API to the public internet. We can use
+   [[https://ngrok.com/download][Ngrok]] for that. Just download it and run with ~./ngrok http 3001~
+   command to get an ngrok url pointing to our ~localhost:3001~.
 
-  #+ATTR_HTML: :width 75%
-  #+ATTR_TEXINFO: :width 6in
-  #+NAME:fig:webhook
-  #+CAPTION:Stripe Dashboard Webhook Creation
-  [[file:img/Stripe-Dashboard-Webhook-Creation.png]]
+*** Webhook Setup using Stripe Dashboard
 
-  The data sent in the request body is encrypted and can only be
-  decrypted by using a signature sent in the header and with the
-  webhook secret that can be found on the webhooks dashboard.
+   #+CINDEX:Dashboard, webhook integration
+   #+CINDEX:Developers Dashboard Webhooks
+   #+CINDEX:Webhooks Developers Dashboard
+   #+CINDEX:endpoint, add to Dashboard
+   #+CINDEX:Add Endpoint, Webhooks
+   #+CINDEX:ngrok endpoint, add
+   We also have to set up our webhook on the Stripe dashboard. Go to
+   *Developers -> Webhooks*, click on =Add endpoint= and type in your
+   ngrok url followed by the endpoint to be called
+   e.g. =http://92832de0.ngrok.io/api/shop/order/process=. Then under
+   *Filter event* select =Select types to send= and search for
+   ~order.payment_succeeded~.
 
-  This also means that we cannot simply use ~bodyParser~ to parse the
-  body, so we need to add an exception to ~bodyParser~ so it will be
-  bypassed when the URL starts with =/api/shop/order/process=. We need
-  to use the ~stripe.webhooks.constructEvent()~ function instead,
-  provided by the Stripe SDK to decrypt the message for us.
+   #+ATTR_HTML: :width 75%
+   #+ATTR_TEXINFO: :width 6in
+   #+NAME:fig:webhook
+   #+CAPTION:Stripe Dashboard Webhook Creation
+   [[file:img/Stripe-Dashboard-Webhook-Creation.png]]
 
-  #+BEGIN_SRC js -n
+*** Decrypting Request Body Sent by Stripe
+
+    #+CINDEX:decrypt request body
+    #+CINDEX:webhook secret
+    #+CINDEX:secret, webhook
+    #+CINDEX:Dashboard, webhooks
+    The data sent in the request body is encrypted and can only be
+    decrypted by using a signature sent in the header and with the
+    webhook secret that can be found on the webhooks dashboard.
+
+    #+CINDEX:@file{bodyParser}, exception to
+    #+CINDEX:@code{stripe.webhooks.constructEvent()} function
+    #+CINDEX:message, decrypt using Stripe SDK
+    #+CINDEX:decrypt message using Stripe SDK
+    #+CINDEX:process orders, endpoint for, @file{/api/shop/order/process}
+    This also means that we cannot simply use ~bodyParser~ to parse
+    the body, so we need to add an exception to ~bodyParser~ so it
+    will be bypassed when the URL starts with
+    =/api/shop/order/process=. We need to use the
+    ~stripe.webhooks.constructEvent()~ function instead, provided by
+    the Stripe SDK to decrypt the message for us.
+
+    #+PINDEX:index.js
+    #+BEGIN_SRC js -n
 // index.js
 const bodyParser = require('body-parser')
 
@@ -983,11 +1076,13 @@ app.post('/api/shop/order/process', async (req, res) => {
   }
   return res.sendStatus(200)
 })
-  #+END_SRC
+    #+END_SRC
 
-  After an order was successfully paid, we can parse send it to other
-  APIs like Salesforce or Stamps to pack things up and get ready to
-  send out.
+    #+CINDEX:Salesforce API
+    #+CINDEX:Stamps API
+    After an order was successfully paid, we can parse and send it to
+    other APIs like Salesforce or Stamps to pack things up and get
+    ready to send out.
 
 * Wrapping It Up
 
@@ -1030,8 +1125,8 @@ app.post('/api/shop/order/process', async (req, res) => {
   :INDEX:    pg
   :END:
 * MACRO SETUP                                                      :noexport:
-#+MACRO: VERSION Version 0.0.4
-#+MACRO: CREATE-DATE Created 2019-01-31 Thu 20:57
+#+MACRO: VERSION Version 0.1.0
+#+MACRO: CREATE-DATE Created 2019-02-01 Fri 09:04
 #+MACRO: file @@texinfo:@file{@@$1@@texinfo:}@@
 #+MACRO: heading @@texinfo:@heading @@$1
 #+MACRO: subheading @@texinfo:@subheading @@$1
