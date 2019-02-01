@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Stripe Payments Integration 101 Roland Szőke January 29, 2019
+(C) 2019 -->
+<!-- Created by GNU Texinfo 6.5, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Implement CC Charges in indexjs (Stripe Payments Integration 101)</title>
+
+<meta name="description" content="Implement CC Charges in indexjs (Stripe Payments Integration 101)">
+<meta name="keywords" content="Implement CC Charges in indexjs (Stripe Payments Integration 101)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="CONCEPT-INDEX.html#CONCEPT-INDEX" rel="index" title="CONCEPT INDEX">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Set-Up-an-Express-Server.html#Set-Up-an-Express-Server" rel="up" title="Set Up an Express Server">
+<link href="Handle-Orders-on-the-Front-End.html#Handle-Orders-on-the-Front-End" rel="next" title="Handle Orders on the Front End">
+<link href="Use-Card-Token-as-Source.html#Use-Card-Token-as-Source" rel="prev" title="Use Card Token as Source">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+blockquote.smallindentedblock {margin-right: 0em; font-size: smaller}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<a name="Implement-CC-Charges-in-indexjs"></a>
+<div class="header">
+<p>
+Previous: <a href="Use-Card-Token-as-Source.html#Use-Card-Token-as-Source" accesskey="p" rel="prev">Use Card Token as &lsquo;<samp>Source</samp>&rsquo;</a>, Up: <a href="Set-Up-an-Express-Server.html#Set-Up-an-Express-Server" accesskey="u" rel="up">Set Up an Express Server</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="CONCEPT-INDEX.html#CONCEPT-INDEX" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Implement-CC-Charges-in-index_002ejs"></a>
+<h4 class="subsection">4.1.4 Implement CC Charges in <code>index.js</code></h4>
+
+<a name="index-index_002ejs-2"></a>
+<a name="index-post_002c-order"></a>
+<a name="index-create-Stripe-order"></a>
+<a name="index-order_002c-create-Stripe"></a>
+<div class="float"><a name="org085e75b"></a>
+<div class="example">
+<pre class="example"> 1  // index.js
+ 2  const stripe = require('stripe')('sk_test_xxxxxxxxxxxxxxxxxxxxxx')
+ 3  
+ 4  app.post('/api/shop/order', async (req, res) =&gt; {
+ 5    const order = req.body.order
+ 6    const source = req.body.source
+ 7    try {
+ 8      const stripeOrder = await stripe.orders.create(order)
+ 9      console.log(`Order created: ${stripeOrder.id}`)
+10      await stripe.orders.pay(stripeOrder.id, {source})
+11    } catch (err) {
+12      // Handle stripe errors here: No such coupon, sku, ect
+13      console.log(`Order error: ${err}`)
+14      return res.sendStatus(404)
+15    }
+16    return res.sendStatus(200)
+17  })
+</pre></div>
+
+<div class="float-caption"><p><strong>Listing 4.2: </strong>App Post Function</p></div></div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Stripe Payments Integration 101 Roland Szőke January 29, 2019
+(C) 2019 -->
+<!-- Created by GNU Texinfo 6.5, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Set Up an Express Server (Stripe Payments Integration 101)</title>
+
+<meta name="description" content="Set Up an Express Server (Stripe Payments Integration 101)">
+<meta name="keywords" content="Set Up an Express Server (Stripe Payments Integration 101)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="CONCEPT-INDEX.html#CONCEPT-INDEX" rel="index" title="CONCEPT INDEX">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Placing-an-Order-With-Stripe.html#Placing-an-Order-With-Stripe" rel="up" title="Placing an Order With Stripe">
+<link href="Access-Stripe-in-Server-indexjs.html#Access-Stripe-in-Server-indexjs" rel="next" title="Access Stripe in Server indexjs">
+<link href="Placing-an-Order-With-Stripe.html#Placing-an-Order-With-Stripe" rel="prev" title="Placing an Order With Stripe">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+blockquote.smallindentedblock {margin-right: 0em; font-size: smaller}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<a name="Set-Up-an-Express-Server"></a>
+<div class="header">
+<p>
+Next: <a href="Handle-Orders-on-the-Front-End.html#Handle-Orders-on-the-Front-End" accesskey="n" rel="next">Handle Orders on the Front End</a>, Up: <a href="Placing-an-Order-With-Stripe.html#Placing-an-Order-With-Stripe" accesskey="u" rel="up">Placing an Order With Stripe</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="CONCEPT-INDEX.html#CONCEPT-INDEX" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Set-Up-an-Express-Server-1"></a>
+<h3 class="section">4.1 Set Up an Express Server</h3>
+
+<a name="index-express-server_002c-set-up"></a>
+<a name="index-routes_002c-API"></a>
+<a name="index-npm"></a>
+<a name="index-back-end"></a>
+<a name="index-node-packages_002c-other-needed"></a>
+<a name="index-express"></a>
+<a name="index-body_002dparser_002c-node"></a>
+<a name="index-cors_002c-node"></a>
+<a name="index-helmet_002c-node"></a>
+<p>We will use <a href="https://expressjs.com/">express</a> to handle the routes of our API. You can find a
+list below of a couple of other node packages to get started. Let&rsquo;s
+create a new root folder and get started.
+</p><div class="example">
+<pre class="example">npm install express stripe body-parser cors helmet
+</pre></div>
+
+<a name="index-CORS"></a>
+<a name="index-Helmet"></a>
+<a name="index-security-headers"></a>
+<a name="index-headers_002c-security"></a>
+<p>The skeleton is a simple express &ldquo;Hello World&rdquo; using <a href="https://www.npmjs.com/package/cors">CORS</a> so that
+the browser won&rsquo;t panic when we try to reach our PI server that
+resides and <a href="https://www.npmjs.com/package/helmet">Helmet</a> to set a bunch of security headers automatically
+for us.
+</p>
+<a name="index-index_002ejs-1"></a>
+<a name="index-server-code_002c-skeleton"></a>
+<div class="float"><a name="org47332a6"></a>
+<div class="example">
+<pre class="example"> 1  // index.js
+ 2  const express = require('express')
+ 3  const helmet = require('helmet')
+ 4  const cors = require('cors')
+ 5  const app = express()
+ 6  const port = 3001
+ 7  
+ 8  app.use(helmet())
+ 9  
+10  app.use(cors({
+11    origin: [/http:\/\/localhost:\d+$/],
+12    allowedHeaders: ['Content-Type', 'Authorization'],
+13    credentials: true
+14  }))
+15  
+16  app.get('/api/', (req, res) =&gt; res.send({ version: '1.0' }))
+17  
+18  app.listen(port, () =&gt; console.log(`Example app listening on port ${port}!`))
+</pre></div>
+
+<div class="float-caption"><p><strong>Listing 4.1: </strong>Initial Framework for Server <code>index.js</code></p></div></div>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Access-Stripe-in-Server-indexjs.html#Access-Stripe-in-Server-indexjs" accesskey="1">Access Stripe in Server <code>index.js</code></a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Stripe-Customers.html#Stripe-Customers" accesskey="2">Stripe Customers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Use-Card-Token-as-Source.html#Use-Card-Token-as-Source" accesskey="3">Use Card Token as &lsquo;<samp>Source</samp>&rsquo;</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Implement-CC-Charges-in-indexjs.html#Implement-CC-Charges-in-indexjs" accesskey="4">Implement CC Charges in <code>index.js</code></a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+
+
+
+</body>
+</html>

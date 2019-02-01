@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Stripe Payments Integration 101 Roland Szőke January 29, 2019
+(C) 2019 -->
+<!-- Created by GNU Texinfo 6.5, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>POST Request to Stripe (Stripe Payments Integration 101)</title>
+
+<meta name="description" content="POST Request to Stripe (Stripe Payments Integration 101)">
+<meta name="keywords" content="POST Request to Stripe (Stripe Payments Integration 101)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="CONCEPT-INDEX.html#CONCEPT-INDEX" rel="index" title="CONCEPT INDEX">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Coding-the-App.html#Coding-the-App" rel="up" title="Coding the App">
+<link href="Charge-a-Credit-Card-in-Shopjs.html#Charge-a-Credit-Card-in-Shopjs" rel="next" title="Charge a Credit Card in Shopjs">
+<link href="Explanation-of-Shopjs.html#Explanation-of-Shopjs" rel="prev" title="Explanation of Shopjs">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+blockquote.smallindentedblock {margin-right: 0em; font-size: smaller}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<a name="POST-Request-to-Stripe"></a>
+<div class="header">
+<p>
+Next: <a href="Charge-a-Credit-Card-in-Shopjs.html#Charge-a-Credit-Card-in-Shopjs" accesskey="n" rel="next">Charge a Credit Card in <samp>Shopjs</samp></a>, Previous: <a href="Explanation-of-Shopjs.html#Explanation-of-Shopjs" accesskey="p" rel="prev">Explanation of <samp>Shopjs</samp></a>, Up: <a href="Coding-the-App.html#Coding-the-App" accesskey="u" rel="up">Coding the App</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="CONCEPT-INDEX.html#CONCEPT-INDEX" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="POST-Request-to-Stripe-1"></a>
+<h4 class="subsection">3.3.4 POST Request to Stripe</h4>
+
+<a name="index-POST-request_002c-credit-card"></a>
+<a name="index-credit-card_002c-charge_002c-POST-request"></a>
+<p>For now let&rsquo;s just keep it simple and charge the card by sending a
+<code>POST</code> request to &lsquo;<samp>https://api.stripe.com/v1/charges</samp>&rsquo; with
+specifying the payment <code>source</code> (this is the token id), the charge
+<code>amount</code> (of the charge) and the <code>currency</code> as described in the
+Stripe API.
+</p>
+<a name="index-API-key_002c-create-restricted"></a>
+<a name="index-authorization"></a>
+<a name="index-Dashboard-1"></a>
+<a name="index-Developers-menu"></a>
+<p>We need to send the API key in the header for authorization. We
+can create a restricted API key on the dashboard in the
+<strong>Developers</strong> menu. Set the permission for charges to &ldquo;Read and
+write&rdquo; as shown in <a href="#orgf51d850">Figure 3.2</a>, below.
+</p>
+<p><strong>Do not forget:. You should never use your swiss army Secret key
+on the client!</strong>
+</p>
+<div class="float"><a name="orgf51d850"></a>
+<img src="img/Stripe-Dashboard-API-Key-Restricted-50.png" alt="img/Stripe-Dashboard-API-Key-Restricted-50">
+
+<div class="float-caption"><p><strong>Figure 3.2: </strong>Restricted API Key in the Dashboard Developers Menu</p></div></div>
+
+
+
+</body>
+</html>

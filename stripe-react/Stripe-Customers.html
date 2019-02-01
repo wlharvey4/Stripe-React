@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Stripe Payments Integration 101 Roland Szőke January 29, 2019
+(C) 2019 -->
+<!-- Created by GNU Texinfo 6.5, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Stripe Customers (Stripe Payments Integration 101)</title>
+
+<meta name="description" content="Stripe Customers (Stripe Payments Integration 101)">
+<meta name="keywords" content="Stripe Customers (Stripe Payments Integration 101)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="CONCEPT-INDEX.html#CONCEPT-INDEX" rel="index" title="CONCEPT INDEX">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Set-Up-an-Express-Server.html#Set-Up-an-Express-Server" rel="up" title="Set Up an Express Server">
+<link href="Use-Card-Token-as-Source.html#Use-Card-Token-as-Source" rel="next" title="Use Card Token as Source">
+<link href="Access-Stripe-in-Server-indexjs.html#Access-Stripe-in-Server-indexjs" rel="prev" title="Access Stripe in Server indexjs">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+blockquote.smallindentedblock {margin-right: 0em; font-size: smaller}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<a name="Stripe-Customers"></a>
+<div class="header">
+<p>
+Next: <a href="Use-Card-Token-as-Source.html#Use-Card-Token-as-Source" accesskey="n" rel="next">Use Card Token as &lsquo;<samp>Source</samp>&rsquo;</a>, Previous: <a href="Access-Stripe-in-Server-indexjs.html#Access-Stripe-in-Server-indexjs" accesskey="p" rel="prev">Access Stripe in Server <code>indexjs</code></a>, Up: <a href="Set-Up-an-Express-Server.html#Set-Up-an-Express-Server" accesskey="u" rel="up">Set Up an Express Server</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="CONCEPT-INDEX.html#CONCEPT-INDEX" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Stripe-Customers-1"></a>
+<h4 class="subsection">4.1.2 Stripe Customers</h4>
+
+<a name="index-Stripe-Customer"></a>
+<a name="index-charge-a-customer"></a>
+<a name="index-Source"></a>
+<a name="index-Card-Token-ID"></a>
+<p>The orders will not be paid automatically. To charge the customer
+we can either use a &lsquo;<samp>Source</samp>&rsquo; directly such as a <strong>Card Token ID</strong> or
+we can create a <a href="https://stripe.com/docs/api/customers/create">Stripe Customer</a>.
+</p>
+<a name="index-Stripe-Customer_002c-benefit-of-using"></a>
+<a name="index-charges_002c-multiple"></a>
+<a name="index-charges_002c-recurring"></a>
+<a name="index-data_002c-store-on-Stripe"></a>
+<p>The added benefit of creating a Stripe customer is that we can
+track multiple charges, or create recurring charges for them and
+also instruct Stripe to store the shipping data and other
+necessary information to fulfill the order.
+</p>
+<a name="index-Customer_002c-create"></a>
+<a name="index-Card-Token"></a>
+<a name="index-data_002c-shipping"></a>
+<a name="index-discount"></a>
+<a name="index-single-click-shopping"></a>
+<a name="index-list-orders"></a>
+<a name="index-orders_002c-list-on-UI"></a>
+<p>You probably want to create Customers from Card Tokens and
+shipping data even when your application already handles
+users. This way you can attach permanent or seasonal discount to
+those Customers, allow them to shop any time with a single click
+and <a href="https://stripe.com/docs/api/orders/list">list their orders</a> on your UI.
+</p>
+
+
+
+</body>
+</html>

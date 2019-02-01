@@ -109,7 +109,7 @@ with Stripe Payments integration as a JavaScript developer.
     #+ATTR_TEXINFO: :alt Stripe Dashboard :width 6in
     #+NAME:fig:stripe-dashboard
     #+CAPTION: The Initial Stripe Dashboard View
-    [[file:img/stripe-payments-integration-dashboard.png]]
+    [[file:./img/stripe-payments-integration-dashboard-50.png]]
 
 * Creating a Webshop in React with Charges
 
@@ -162,7 +162,7 @@ with Stripe Payments integration as a JavaScript developer.
   #+ATTR_TEXINFO: :alt Stripe Dashboard API Key :width 6in
   #+NAME: fig:stripe-api
   #+CAPTION: Stripe Payments Dashboard API Key
-  [[file:img/stripe-payments-dashboard-api-key.png]]
+  [[file:img/stripe-payments-dashboard-api-key-50.png]]
 
 ** Terminal Commands To Build the React App
 
@@ -467,7 +467,7 @@ export default injectStripe(Shop)
     #+ATTR_TEXINFO: :width 6in
     #+NAME:fig:restricted-api-key
     #+CAPTION:Restricted API Key in the Dashboard Developers Menu
-    [[file:img/Stripe-Dashboard-API-Key-Restricted.png]]
+    [[file:img/Stripe-Dashboard-API-Key-Restricted-50.png]]
 
 *** Charge a Credit Card in {{{file(Shop.js)}}}
 
@@ -845,13 +845,13 @@ render () {
     #+ATTR_TEXINFO: :width 6in
     #+NAME:fig:create-products
     #+CAPTION:Create a Product
-    [[file:img/stripe-payments-dashboard-banana-product-creation.png]]
+    [[file:img/stripe-payments-dashboard-banana-product-creation-50.png]]
 
     #+ATTR_HTML: :width 75%
     #+ATTR_TEXINFO: :width 6in
     #+NAME:fig:create-sku
     #+CAPTION:Create a SKU
-    [[file:img/Stripe-Payments-Dashboard-Stock-Keeping-Unit.png]]
+    [[file:img/Stripe-Payments-Dashboard-Stock-Keeping-Unit-50.png]]
 
 *** Add Products to the Webshop
 
@@ -960,7 +960,7 @@ handleSubmit(evt) {
     #+ATTR_TEXINFO: :width 6in
     #+NAME:fig:coupon
     #+CAPTION:Dashboard Coupon Creation
-    [[file:img/Stripe-Payments-Dashboard-Coupon-Creation.png]]
+    [[file:img/Stripe-Payments-Dashboard-Coupon-Creation-50.png]]
 
     #+CINDEX:webhooks, set up
     Great! Now we have our products, we can create orders, and we can
@@ -974,7 +974,7 @@ handleSubmit(evt) {
     #+ATTR_TEXINFO: :width 6in
     #+NAME:fig:orders
     #+CAPTION:Stripe Payments Shop Orders
-    [[file:img/Stripe-Payments-Shop-Orders.png]]
+    [[file:img/Stripe-Payments-Shop-Orders-50.png]]
 
 * Setting up Stripe Webhooks to Verify Payments
 
@@ -1034,7 +1034,7 @@ handleSubmit(evt) {
    #+ATTR_TEXINFO: :width 6in
    #+NAME:fig:webhook
    #+CAPTION:Stripe Dashboard Webhook Creation
-   [[file:img/Stripe-Dashboard-Webhook-Creation.png]]
+   [[file:img/Stripe-Dashboard-Webhook-Creation-50.png]]
 
 *** Decrypting Request Body Sent by Stripe
 
@@ -1159,8 +1159,8 @@ app.post('/api/shop/order/process', async (req, res) => {
   :INDEX:    pg
   :END:
 * MACRO SETUP                                                      :noexport:
-#+MACRO: VERSION Version 0.1.2
-#+MACRO: CREATE-DATE Created 2019-02-01 Fri 09:34
+#+MACRO: VERSION Version 0.1.3
+#+MACRO: CREATE-DATE Created 2019-02-01 Fri 10:38
 #+MACRO: file @@texinfo:@file{@@$1@@texinfo:}@@
 #+MACRO: heading @@texinfo:@heading @@$1
 #+MACRO: subheading @@texinfo:@subheading @@$1

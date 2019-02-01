@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Stripe Payments Integration 101 Roland Szőke January 29, 2019
+(C) 2019 -->
+<!-- Created by GNU Texinfo 6.5, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Charge a Credit Card in Shopjs (Stripe Payments Integration 101)</title>
+
+<meta name="description" content="Charge a Credit Card in Shopjs (Stripe Payments Integration 101)">
+<meta name="keywords" content="Charge a Credit Card in Shopjs (Stripe Payments Integration 101)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="CONCEPT-INDEX.html#CONCEPT-INDEX" rel="index" title="CONCEPT INDEX">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Coding-the-App.html#Coding-the-App" rel="up" title="Coding the App">
+<link href="Placing-an-Order-With-Stripe.html#Placing-an-Order-With-Stripe" rel="next" title="Placing an Order With Stripe">
+<link href="POST-Request-to-Stripe.html#POST-Request-to-Stripe" rel="prev" title="POST Request to Stripe">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+blockquote.smallindentedblock {margin-right: 0em; font-size: smaller}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<a name="Charge-a-Credit-Card-in-Shopjs"></a>
+<div class="header">
+<p>
+Previous: <a href="POST-Request-to-Stripe.html#POST-Request-to-Stripe" accesskey="p" rel="prev">POST Request to Stripe</a>, Up: <a href="Coding-the-App.html#Coding-the-App" accesskey="u" rel="up">Coding the App</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="CONCEPT-INDEX.html#CONCEPT-INDEX" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Charge-a-Credit-Card-in-Shop_002ejs"></a>
+<h4 class="subsection">3.3.5 Charge a Credit Card in <samp>Shop.js</samp></h4>
+
+<a name="index-Shop_002ejs-3"></a>
+<a name="index-Shop-component_002c-charge-credit-card"></a>
+<a name="index-credit-card_002c-charge-1"></a>
+<a name="index-axios-2"></a>
+<a name="index-post_002c-axios"></a>
+<a name="index-props_002estripe_002ecreateToken_0028_0029"></a>
+<div class="example">
+<pre class="example"> 1  // Shop.js
+ 2  // ...
+ 3  const stripeAuthHeader = {
+ 4    'Content-Type': 'application/x-www-form-urlencoded',
+ 5    'Authorization': `Bearer rk_test_xxxxxxxxxxxxxxxxxxxxxxxx`
+ 6  }
+ 7  
+ 8  class Shop extends Component {
+ 9    // ...
+10    handleSubmit(evt) {
+11      evt.preventDefault()
+12      this.setState({fetching: true})
+13      const cart = this.state.cart
+14  
+15      this.props.stripe.createToken().then(({token}) =&gt; {
+16          const price =
+17             cart.banana * prices.banana + cart.cucumber * prices.cucumber
+18          axios.post(`https://api.stripe.com/v1/charges`,
+19          qs.stringify({
+20            source: token.id,
+21            amount: price,
+22            currency: 'usd'
+23          }),
+24          { headers: stripeAuthHeader })
+25          .then((resp) =&gt; {
+26            this.setState({fetching: false})
+27            alert(`Thank you for your purchase! You card has been charged with: \
+28              ${(resp.data.amount / 100).toLocaleString('en-US',
+29              {style: 'currency', currency: 'usd'})}`)
+30          })
+31          .catch(error =&gt; {
+32            this.setState({fetching: false})
+33            console.log(error)
+34          })
+35      }).catch(error =&gt; {
+36        this.setState({fetching: false})
+37        console.log(error)
+38      })
+39    }
+40    // ...
+41  }
+</pre></div>
+
+<a name="index-testing"></a>
+<a name="index-international-cards"></a>
+<p>For testing purposes you can use these <a href="https://stripe.com/docs/testing#international-cards">international cards</a> provided by Stripe.
+</p>
+
+
+
+</body>
+</html>

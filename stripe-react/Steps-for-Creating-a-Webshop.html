@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Stripe Payments Integration 101 Roland Szőke January 29, 2019
+(C) 2019 -->
+<!-- Created by GNU Texinfo 6.5, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Steps for Creating a Webshop (Stripe Payments Integration 101)</title>
+
+<meta name="description" content="Steps for Creating a Webshop (Stripe Payments Integration 101)">
+<meta name="keywords" content="Steps for Creating a Webshop (Stripe Payments Integration 101)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="CONCEPT-INDEX.html#CONCEPT-INDEX" rel="index" title="CONCEPT INDEX">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Creating-a-Webshop-in-React-with-Charges.html#Creating-a-Webshop-in-React-with-Charges" rel="up" title="Creating a Webshop in React with Charges">
+<link href="Terminal-Commands-To-Build-the-React-App.html#Terminal-Commands-To-Build-the-React-App" rel="next" title="Terminal Commands To Build the React App">
+<link href="Creating-a-Webshop-in-React-with-Charges.html#Creating-a-Webshop-in-React-with-Charges" rel="prev" title="Creating a Webshop in React with Charges">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+blockquote.smallindentedblock {margin-right: 0em; font-size: smaller}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<a name="Steps-for-Creating-a-Webshop"></a>
+<div class="header">
+<p>
+Next: <a href="Terminal-Commands-To-Build-the-React-App.html#Terminal-Commands-To-Build-the-React-App" accesskey="n" rel="next">Terminal Commands To Build the React App</a>, Up: <a href="Creating-a-Webshop-in-React-with-Charges.html#Creating-a-Webshop-in-React-with-Charges" accesskey="u" rel="up">Creating a Webshop in React with Charges</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="CONCEPT-INDEX.html#CONCEPT-INDEX" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Steps-for-Creating-a-Webshop-1"></a>
+<h3 class="section">3.1 Steps for Creating a Webshop</h3>
+
+<a name="index-create_002dreact_002dapp"></a>
+<a name="index-axios"></a>
+<a name="index-query_002dstring_002dobject"></a>
+<a name="index-convert-objects-to-query-strings"></a>
+<a name="index-Stripe-requests"></a>
+<a name="index-React-Stripe-Elements"></a>
+<a name="index-Stripe_002ejs"></a>
+<a name="index-Stripe-Elements"></a>
+<a name="index-credit-card_002c-secure-inputs"></a>
+<a name="index-tokenization_002c-credit-card-data"></a>
+<ul>
+<li> We can use <a href="https://github.com/facebook/create-react-app">Create React App</a> to get started.
+</li><li> We&rsquo;re going to use <a href="https://github.com/axios/axios">Axios</a> for HTTP requests;
+</li><li> and <a href="https://www.npmjs.com/package/query-string-object">query-string-object</a> to convert objects to query strings for
+Stripe requests.
+</li><li> We will also need <a href="https://github.com/stripe/react-stripe-elements">React Stripe Elements</a>, which is a React wrapper
+for Stripe.js and Stripe Elements. It adds secure credit card
+inputs and sends the card&rsquo;s data for tokenization to the Stripe
+API.
+</li></ul>
+
+
+<a name="index-credit-card-details_002c-raw"></a>
+<a name="index-credit-card-security"></a>
+<a name="index-WARNING_002c-raw-credit-card-details"></a>
+<p><strong>WARNING:</strong> You should never send raw credit card details to your
+own API, but let Stripe handle the credit card security for you.
+</p>
+<a name="index-token_002c-from-Stripe"></a>
+<a name="index-credit-card-identification"></a>
+<a name="index-identify-credit-card_002c-how"></a>
+<p>You will be able to identify the card provided by the user using
+the token you got from Stripe.
+</p>
+<a name="index-Stripe-Dashboard"></a>
+<a name="index-Dashboard_002c-Stripe"></a>
+<a name="index-API-key_002c-Stripe-Dashboard"></a>
+<div class="float"><a name="org025971f"></a>
+<img src="img/stripe-payments-dashboard-api-key-50.png" alt="Stripe Dashboard API Key">
+
+<div class="float-caption"><p><strong>Figure 3.1: </strong>Stripe Payments Dashboard API Key</p></div></div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Stripe Payments Integration 101 Roland Szőke January 29, 2019
+(C) 2019 -->
+<!-- Created by GNU Texinfo 6.5, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Stripe Object in Root React Component Appjs (Stripe Payments Integration 101)</title>
+
+<meta name="description" content="Stripe Object in Root React Component Appjs (Stripe Payments Integration 101)">
+<meta name="keywords" content="Stripe Object in Root React Component Appjs (Stripe Payments Integration 101)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="CONCEPT-INDEX.html#CONCEPT-INDEX" rel="index" title="CONCEPT INDEX">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Coding-the-App.html#Coding-the-App" rel="up" title="Coding the App">
+<link href="Implementation-of-Shopjs-Component.html#Implementation-of-Shopjs-Component" rel="next" title="Implementation of Shopjs Component">
+<link href="Coding-the-App.html#Coding-the-App" rel="prev" title="Coding the App">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+blockquote.smallindentedblock {margin-right: 0em; font-size: smaller}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<a name="Stripe-Object-in-Root-React-Component-Appjs"></a>
+<div class="header">
+<p>
+Next: <a href="Implementation-of-Shopjs-Component.html#Implementation-of-Shopjs-Component" accesskey="n" rel="next">Implementation of <samp>Shopjs</samp> Component</a>, Up: <a href="Coding-the-App.html#Coding-the-App" accesskey="u" rel="up">Coding the App</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="CONCEPT-INDEX.html#CONCEPT-INDEX" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Stripe-Object-in-Root-React-Component-App_002ejs"></a>
+<h4 class="subsection">3.3.1 Stripe Object in Root React Component <samp>App.js</samp></h4>
+
+<a name="index-StripeProvider-component"></a>
+<a name="index-_007ereact_002dstripe_002delements_007e"></a>
+<a name="index-root-react-component"></a>
+<a name="index-react-root-component"></a>
+<a name="index-App_002ejs"></a>
+<p>First, we have to add a <code>&lt;StripeProvider/&gt;</code> from
+<code>react-stripe-elements</code> to our root React App component.
+</p>
+<a name="index-Stripe-object"></a>
+<a name="index-props"></a>
+<a name="index-react-props"></a>
+<a name="index-public-access-key"></a>
+<a name="index-access-key_002c-public"></a>
+<a name="index-key_002c-public-access"></a>
+<a name="index-apiKey"></a>
+<a name="index-Dashboard"></a>
+<a name="index-Developers-section_002c-Dashboard-1"></a>
+<a name="index-API-keys"></a>
+<a name="index-Dashboard-menu"></a>
+<a name="index-Publishable-key"></a>
+<p>This will give us access to the <a href="https://stripe.com/docs/stripe-js/reference#the-stripe-object">Stripe object</a>.  In the props, we
+should pass a <strong>public access key</strong> (<code>apiKey</code>) which is found in the
+dashboard&rsquo;s <strong>Developers</strong> section under the <em>API keys</em> menu as
+<em>Publishable key</em>. (<a href="Steps-for-Creating-a-Webshop.html#org025971f">Figure 3.1</a>)
+</p>
+<a name="index-App_002ejs-1"></a>
+<a name="index-react_002dstripe_002delements"></a>
+<a name="index-Elements"></a>
+<a name="index-StripeProvider"></a>
+<a name="index-apiKey-1"></a>
+<div class="float"><a name="org9b55c79"></a>
+<div class="example">
+<pre class="example"> 1  // App.js
+ 2  import React from 'react'
+ 3  import {StripeProvider, Elements} from 'react-stripe-elements'
+ 4  import Shop from './Shop'
+ 5  
+ 6  const App = () =&gt; {
+ 7    return (
+ 8      &lt;StripeProvider apiKey=&quot;pk_test_xxxxxxxxxxxxxxxxxxxxxxxx&quot;&gt;
+ 9        &lt;Elements&gt;
+10          &lt;Shop/&gt;
+11        &lt;/Elements&gt;
+12      &lt;/StripeProvider&gt;
+13    )
+14  }
+</pre></div>
+
+<div class="float-caption"><p><strong>Listing 3.2: </strong><code>StripeProvider</code> Component in Root Component</p></div></div>
+<p>The <code>&lt;Shop/&gt;</code> is the implementation of our shop form as you can see
+from <code>import Shop from './Shop'</code>.  We&rsquo;ll go into the details later.
+</p>
+
+
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Stripe Payments Integration 101 Roland Szőke January 29, 2019
+(C) 2019 -->
+<!-- Created by GNU Texinfo 6.5, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Setting up Stripe Webhooks to Verify Payments (Stripe Payments Integration 101)</title>
+
+<meta name="description" content="Setting up Stripe Webhooks to Verify Payments (Stripe Payments Integration 101)">
+<meta name="keywords" content="Setting up Stripe Webhooks to Verify Payments (Stripe Payments Integration 101)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="CONCEPT-INDEX.html#CONCEPT-INDEX" rel="index" title="CONCEPT INDEX">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Webhook-Notification-When-Order-Gets-Paid.html#Webhook-Notification-When-Order-Gets-Paid" rel="next" title="Webhook Notification When Order Gets Paid">
+<link href="Create-a-Coupon-for-Testing.html#Create-a-Coupon-for-Testing" rel="prev" title="Create a Coupon for Testing">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+blockquote.smallindentedblock {margin-right: 0em; font-size: smaller}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<a name="Setting-up-Stripe-Webhooks-to-Verify-Payments"></a>
+<div class="header">
+<p>
+Next: <a href="Wrapping-It-Up.html#Wrapping-It-Up" accesskey="n" rel="next">Wrapping It Up</a>, Previous: <a href="Placing-an-Order-With-Stripe.html#Placing-an-Order-With-Stripe" accesskey="p" rel="prev">Placing an Order With Stripe</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="CONCEPT-INDEX.html#CONCEPT-INDEX" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Setting-up-Stripe-Webhooks-to-Verify-Payments-1"></a>
+<h2 class="chapter">5 Setting up Stripe Webhooks to Verify Payments</h2>
+
+<a name="index-Source_002c-assigned-to-customers"></a>
+<a name="index-Stripe-payment-methods"></a>
+<a name="index-payment-methods_002c-several-on-Stripe"></a>
+<p>As we discussed earlier, we are not assigning cards but Sources to
+Customers. The reason behind that is Stripe is capable of using
+<a href="https://stripe.com/docs/sources">several payment methods</a>, some of which may take days to be verified.
+</p>
+<a name="index-endpoint-for-Stripe-to-call-on-event"></a>
+<a name="index-webhooks_002c-usefulness"></a>
+<p>We need to set up an endpoint Stripe can call when an event &mdash; such
+as a successful payment &mdash; has happened. Webhooks are also useful
+when an event is not initiated by us via calling the API, but comes
+straight from Stripe.
+</p>
+<a name="index-subscription-service"></a>
+<a name="index-recurring-payments_002c-webhook-for"></a>
+<a name="index-webhook-for-recurring-payment"></a>
+<p>Imagine that you have a subscription service, and you don&rsquo;t want to
+charge the customer every month. In this case, you can set up a
+webhook, and you will get notified when the recurring payment was
+successful or if it failed.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Webhook-Notification-When-Order-Gets-Paid.html#Webhook-Notification-When-Order-Gets-Paid" accesskey="1">Webhook Notification When Order Gets Paid</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+
+
+
+</body>
+</html>

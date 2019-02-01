@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Stripe Payments Integration 101 Roland Szőke January 29, 2019
+(C) 2019 -->
+<!-- Created by GNU Texinfo 6.5, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Implementation of Shopjs Component (Stripe Payments Integration 101)</title>
+
+<meta name="description" content="Implementation of Shopjs Component (Stripe Payments Integration 101)">
+<meta name="keywords" content="Implementation of Shopjs Component (Stripe Payments Integration 101)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="CONCEPT-INDEX.html#CONCEPT-INDEX" rel="index" title="CONCEPT INDEX">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Coding-the-App.html#Coding-the-App" rel="up" title="Coding the App">
+<link href="Explanation-of-Shopjs.html#Explanation-of-Shopjs" rel="next" title="Explanation of Shopjs">
+<link href="Stripe-Object-in-Root-React-Component-Appjs.html#Stripe-Object-in-Root-React-Component-Appjs" rel="prev" title="Stripe Object in Root React Component Appjs">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+blockquote.smallindentedblock {margin-right: 0em; font-size: smaller}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<a name="Implementation-of-Shopjs-Component"></a>
+<div class="header">
+<p>
+Next: <a href="Explanation-of-Shopjs.html#Explanation-of-Shopjs" accesskey="n" rel="next">Explanation of <samp>Shopjs</samp></a>, Previous: <a href="Stripe-Object-in-Root-React-Component-Appjs.html#Stripe-Object-in-Root-React-Component-Appjs" accesskey="p" rel="prev">Stripe Object in Root React Component <samp>Appjs</samp></a>, Up: <a href="Coding-the-App.html#Coding-the-App" accesskey="u" rel="up">Coding the App</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="CONCEPT-INDEX.html#CONCEPT-INDEX" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Implementation-of-Shop_002ejs-Component"></a>
+<h4 class="subsection">3.3.2 Implementation of <samp>Shop.js</samp> Component</h4>
+
+<a name="index-Elements-1"></a>
+<a name="index-injectStripe"></a>
+<a name="index-Shop_002ejs"></a>
+<p>As you can see the <code>&lt;Shop/&gt;</code> is wrapped in <code>&lt;Elements&gt;</code> imported
+from <samp>react-stripe-elements</samp> so that you can use
+<code>injectStripe</code> in your components. To shed some light on this,
+let&rsquo;s take a look at our implementation in <samp>Shop.js</samp>.
+</p>
+<a name="index-Shop_002ejs-1"></a>
+<div class="example">
+<pre class="example">  1   // Shop.js
+  2  import React, { Component } from 'react'
+  3  import { CardElement } from 'react-stripe-elements'
+  4  import PropTypes from 'prop-types'
+  5  import axios from 'axios'
+  6  import qs from 'query-string-object'
+  7  
+  8  const prices = {
+  9    banana: 150,
+ 10    cucumber: 100
+ 11  }
+ 12  
+ 13  class Shop extends Component {
+ 14    constructor(props) {
+ 15      super(props)
+ 16      this.state = {
+ 17        fetching: false,
+ 18        cart: {
+ 19          banana: 0,
+ 20          cucumber: 0
+ 21        }
+ 22      }
+ 23      this.handleCartChange = this.handleCartChange.bind(this)
+ 24      this.handleCartReset = this.handleCartReset.bind(this)
+ 25      this.handleSubmit = this.handleSubmit.bind(this)
+ 26    }
+ 27  
+ 28    handleCartChange(evt) {
+ 29      evt.preventDefault()
+ 30      const cart = this.state.cart
+ 31      cart[evt.target.name]+= parseInt(evt.target.value)
+ 32      this.setState({cart})
+ 33    }
+ 34  
+ 35    handleCartReset(evt) {
+ 36      evt.preventDefault()
+ 37      this.setState({cart:{banana: 0, cucumber: 0}})
+ 38    }
+ 39  
+ 40    handleSubmit(evt) {
+ 41      // TODO
+ 42    }
+ 43  
+ 44    render () {
+ 45      const cart = this.state.cart
+ 46      const fetching = this.state.fetching
+ 47      return (
+ 48        &lt;form onSubmit={this.handleSubmit}
+ 49              style={{width: '550px', margin: '20px',
+ 50                      padding: '10px', border: '2px solid lightseagreen',
+ 51                      borderRadius: '10px'}}&gt;
+ 52          &lt;div&gt;
+ 53            Banana {(prices.banana / 100).toLocaleString('en-US',
+ 54                   {style: 'currency', currency: 'usd'})}:
+ 55            &lt;div&gt;
+ 56              &lt;button name=&quot;banana&quot; value={1}
+ 57                 onClick={this.handleCartChange}&gt;
+ 58                 +
+ 59              &lt;/button&gt;
+ 60              &lt;button name=&quot;banana&quot; value={-1}
+ 61                 onClick={this.handleCartChange}
+ 62                 disabled={cart.banana &lt;= 0}&gt;
+ 63                 -
+ 64              &lt;/button&gt;
+ 65              {cart.banana}
+ 66            &lt;/div&gt;
+ 67          &lt;/div&gt;
+ 68          &lt;div&gt;
+ 69            Cucumber {(prices.cucumber / 100).toLocaleString('en-US',
+ 70                     {style: 'currency', currency: 'usd'})}:
+ 71            &lt;div&gt;
+ 72              &lt;button name=&quot;cucumber&quot; value={1}
+ 73                 onClick={this.handleCartChange}&gt;
+ 74                 +
+ 75              &lt;/button&gt;
+ 76              &lt;button name=&quot;cucumber&quot; value={-1}
+ 77                 onClick={this.handleCartChange} disabled={cart.cucumber &lt;= 0}&gt;
+ 78                 -
+ 79              &lt;/button&gt;
+ 80              {cart.cucumber}
+ 81            &lt;/div&gt;
+ 82          &lt;/div&gt;
+ 83          &lt;button onClick={this.handleCartReset}&gt; Reset Cart &lt;/button&gt;
+ 84          &lt;div style={{width: '450px', margin: '10px',
+ 85                       padding: '5px', border: '2px solid green',
+ 86                       borderRadius: '10px'}}&gt;
+ 87             &lt;CardElement style={{base: {fontSize: '18px'}}}/&gt;
+ 88          &lt;/div&gt;
+ 89          {!fetching
+ 90            ? &lt;button type=&quot;submit&quot;
+ 91               disabled={cart.banana === 0 &amp;&amp;
+ 92               cart.cucumber === 0}&gt;Purchase&lt;/button&gt;
+ 93            : 'Purchasing...'
+ 94          }
+ 95          Price:
+ 96            {((cart.banana * prices.banana + cart.cucumber * prices.cucumber) / 100)
+ 97                 .toLocaleString('en-US',
+ 98                {style: 'currency', currency: 'usd'})}
+ 99        &lt;/form&gt;
+100      )
+101    }
+102  }
+103  
+104  Shop.propTypes = {
+105    stripe: PropTypes.shape({
+106      createToken: PropTypes.func.isRequired
+107    }).isRequired
+108  }
+</pre></div>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="Explanation-of-Shopjs.html#Explanation-of-Shopjs" accesskey="n" rel="next">Explanation of <samp>Shopjs</samp></a>, Previous: <a href="Stripe-Object-in-Root-React-Component-Appjs.html#Stripe-Object-in-Root-React-Component-Appjs" accesskey="p" rel="prev">Stripe Object in Root React Component <samp>Appjs</samp></a>, Up: <a href="Coding-the-App.html#Coding-the-App" accesskey="u" rel="up">Coding the App</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="CONCEPT-INDEX.html#CONCEPT-INDEX" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

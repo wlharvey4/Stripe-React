@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Stripe Payments Integration 101 Roland Szőke January 29, 2019
+(C) 2019 -->
+<!-- Created by GNU Texinfo 6.5, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Create a Coupon for Testing (Stripe Payments Integration 101)</title>
+
+<meta name="description" content="Create a Coupon for Testing (Stripe Payments Integration 101)">
+<meta name="keywords" content="Create a Coupon for Testing (Stripe Payments Integration 101)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="CONCEPT-INDEX.html#CONCEPT-INDEX" rel="index" title="CONCEPT INDEX">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Handle-Orders-on-the-Front-End.html#Handle-Orders-on-the-Front-End" rel="up" title="Handle Orders on the Front End">
+<link href="Setting-up-Stripe-Webhooks-to-Verify-Payments.html#Setting-up-Stripe-Webhooks-to-Verify-Payments" rel="next" title="Setting up Stripe Webhooks to Verify Payments">
+<link href="Send-Orders-to-Stripe-API-on-Submit.html#Send-Orders-to-Stripe-API-on-Submit" rel="prev" title="Send Orders to Stripe API on Submit">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+blockquote.smallindentedblock {margin-right: 0em; font-size: smaller}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<a name="Create-a-Coupon-for-Testing"></a>
+<div class="header">
+<p>
+Previous: <a href="Send-Orders-to-Stripe-API-on-Submit.html#Send-Orders-to-Stripe-API-on-Submit" accesskey="p" rel="prev">Send Orders to Stripe API on Submit</a>, Up: <a href="Handle-Orders-on-the-Front-End.html#Handle-Orders-on-the-Front-End" accesskey="u" rel="up">Handle Orders on the Front End</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="CONCEPT-INDEX.html#CONCEPT-INDEX" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Create-a-Coupon-for-Testing-1"></a>
+<h4 class="subsection">4.2.6 Create a Coupon for Testing</h4>
+
+<a name="index-coupon_002c-create"></a>
+<a name="index-testing-1"></a>
+<a name="index-Dashboard-3"></a>
+<a name="index-Billing-menu_002c-Dashboard"></a>
+<a name="index-Coupons-tab_002c-Dashboard"></a>
+<p>Let&rsquo;s create a coupon for testing purposes. This can be done on
+the dashboard as well. You can find this option under the
+<strong>Billing</strong> menu on the <strong>Coupons</strong> tab.
+</p>
+<a name="index-coupons_002c-multiple-types"></a>
+<a name="index-coupons_002c-duration"></a>
+<a name="index-coupons_002c-attached-to-Customers"></a>
+<p>There are multiple types of coupons based on their duration, but
+only coupons with the type <em>Once</em> can be used for orders. The rest
+of the coupons can be attached to Stripe Customers.
+</p>
+<a name="index-coupon_002c-parameters"></a>
+<p>You can also specify a lot of parameters for the coupon you
+create, such as how many times it can be used, whether it is
+amount based or percentage based, and when will the coupon
+expire. Now we need a coupon that can be used only once and
+provides a reduction on the price by a certain amount.
+</p>
+<div class="float"><a name="orgc1d5290"></a>
+<img src="img/Stripe-Payments-Dashboard-Coupon-Creation-50.png" alt="img/Stripe-Payments-Dashboard-Coupon-Creation-50">
+
+<div class="float-caption"><p><strong>Figure 4.3: </strong>Dashboard Coupon Creation</p></div></div>
+<a name="index-webhooks_002c-set-up"></a>
+<p>Great! Now we have our products, we can create orders, and we can
+also ask Stripe to charge the customer&rsquo;s card for us. But we are
+still not ready to ship the products as we have no idea at the
+moment whether the charge was successful. To get that information,
+we need to set up <em>webhooks</em>, so Stripe can let us know when the
+money is on its way.
+</p>
+<div class="float"><a name="org358e94c"></a>
+<img src="img/Stripe-Payments-Shop-Orders-50.png" alt="img/Stripe-Payments-Shop-Orders-50">
+
+<div class="float-caption"><p><strong>Figure 4.4: </strong>Stripe Payments Shop Orders</p></div></div>
+
+
+
+</body>
+</html>

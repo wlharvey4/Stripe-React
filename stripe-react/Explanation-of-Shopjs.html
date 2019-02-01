@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Stripe Payments Integration 101 Roland Szőke January 29, 2019
+(C) 2019 -->
+<!-- Created by GNU Texinfo 6.5, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Explanation of Shopjs (Stripe Payments Integration 101)</title>
+
+<meta name="description" content="Explanation of Shopjs (Stripe Payments Integration 101)">
+<meta name="keywords" content="Explanation of Shopjs (Stripe Payments Integration 101)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="CONCEPT-INDEX.html#CONCEPT-INDEX" rel="index" title="CONCEPT INDEX">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Coding-the-App.html#Coding-the-App" rel="up" title="Coding the App">
+<link href="POST-Request-to-Stripe.html#POST-Request-to-Stripe" rel="next" title="POST Request to Stripe">
+<link href="Implementation-of-Shopjs-Component.html#Implementation-of-Shopjs-Component" rel="prev" title="Implementation of Shopjs Component">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+blockquote.smallindentedblock {margin-right: 0em; font-size: smaller}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<a name="Explanation-of-Shopjs"></a>
+<div class="header">
+<p>
+Next: <a href="POST-Request-to-Stripe.html#POST-Request-to-Stripe" accesskey="n" rel="next">POST Request to Stripe</a>, Previous: <a href="Implementation-of-Shopjs-Component.html#Implementation-of-Shopjs-Component" accesskey="p" rel="prev">Implementation of <samp>Shopjs</samp> Component</a>, Up: <a href="Coding-the-App.html#Coding-the-App" accesskey="u" rel="up">Coding the App</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="CONCEPT-INDEX.html#CONCEPT-INDEX" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Explanation-of-Shop_002ejs"></a>
+<h4 class="subsection">3.3.3 Explanation of <samp>Shop.js</samp></h4>
+
+<a name="Simple-React-Form"></a>
+<h3 class="heading">Simple React Form</h3>
+
+<a name="index-React-form"></a>
+<a name="index-form_002c-React"></a>
+<p>The <code>Shop</code> is a simple React form with purchasable elements:
+&lsquo;<samp>Banana</samp>&rsquo; and &lsquo;<samp>Cucumber</samp>&rsquo;, and with a quantity &lsquo;<samp>increase/decrease</samp>&rsquo;
+button for each. Clicking the buttons will change their respective
+amount in <code>this.state.cart</code>.
+</p>
+<a name="Presentation"></a>
+<h4 class="subheading">Presentation</h4>
+
+<p>There is a &lsquo;<samp>submit</samp>&rsquo; button below, and the current total price of
+the cart is printed at the very bottom of the form.  Price will
+expect the prices in cents, so we store them as cents, but of
+course, we want to present them to the user in dollars.  We prefer
+them to be shown to the second decimal place, e.g. $2.50 instead
+of $2.5. To achieve this, we can use the built-in
+<code>toLocaleString()</code> function to format the prices.
+</p>
+<a name="Stripe-Form-for-Card-Details_003a-_003cCardElement_002f_003e"></a>
+<h3 class="heading">Stripe Form for Card Details: <code>&lt;CardElement/&gt;</code></h3>
+
+<a name="index-Stripe_002c-in-React-form"></a>
+<a name="index-Stripe-form-element"></a>
+<a name="index-credit-card_002c-details"></a>
+<a name="index-CardElement"></a>
+<a name="index-react_002dstripe_002delements-1"></a>
+<a name="index-css_002c-form-style"></a>
+<p>Now comes the Stripe-specific part: we need to add a form element
+so users can enter their card details. To achieve this, we only
+need to add <code>&lt;CardElement/&gt;</code> from
+<samp>react-stripe-elements</samp> and that&rsquo;s it. I&rsquo;ve also added a
+bit of low effort inline &lsquo;<samp>css</samp>&rsquo; to make this shop at least somewhat
+pleasing to the eye.
+</p>
+<a name="Pass-Sripe-Object-As-Prop-to-the-Shop"></a>
+<h3 class="heading">Pass Sripe Object As Prop to the <code>Shop</code></h3>
+
+<a name="index-injectStripe-hoc"></a>
+<a name="index-higher_002dorder_002dcomponent_002c-injectStripe"></a>
+<a name="index-Stripe-object_002c-as-prop"></a>
+<a name="index-Shop-component"></a>
+<a name="index-createToken_0028_0029-function"></a>
+<a name="index-handleSubmit"></a>
+<a name="index-credit-card_002c-tokenized"></a>
+<a name="index-tokenize_002c-credit-card"></a>
+<a name="index-credit-card_002c-charge"></a>
+<p>We also need to use the <code>injectStripe</code> Higher-Order-Component in
+order to pass the <code>Stripe</code> object as a prop to the <code>&lt;Shop/&gt;</code>
+component, so we can call Stripe&rsquo;s <code>createToken()</code> function in
+<code>handleSubmit</code> to tokenize the user&rsquo;s card, so they can be
+charged.  Once we receive the tokenized card from Stripe, we are
+ready to charge it.
+</p>
+<a name="index-Shop_002ejs-2"></a>
+<a name="index-injectStripe-1"></a>
+<a name="index-react_002dstripe_002delements-2"></a>
+<a name="index-injectStripe_0028Shop_0029-function"></a>
+<div class="float"><a name="orge682315"></a>
+<div class="example">
+<pre class="example">1  // Shop.js
+2  import { injectStripe } from 'react-stripe-elements'
+3  export default injectStripe(Shop)
+</pre></div>
+
+<div class="float-caption"><p><strong>Listing 3.3: </strong>Inject Stripe from react-stripe-elements</p></div></div>
+<hr>
+<div class="header">
+<p>
+Next: <a href="POST-Request-to-Stripe.html#POST-Request-to-Stripe" accesskey="n" rel="next">POST Request to Stripe</a>, Previous: <a href="Implementation-of-Shopjs-Component.html#Implementation-of-Shopjs-Component" accesskey="p" rel="prev">Implementation of <samp>Shopjs</samp> Component</a>, Up: <a href="Coding-the-App.html#Coding-the-App" accesskey="u" rel="up">Coding the App</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="CONCEPT-INDEX.html#CONCEPT-INDEX" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

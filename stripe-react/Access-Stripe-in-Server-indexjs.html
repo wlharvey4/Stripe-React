@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Stripe Payments Integration 101 Roland Szőke January 29, 2019
+(C) 2019 -->
+<!-- Created by GNU Texinfo 6.5, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Access Stripe in Server indexjs (Stripe Payments Integration 101)</title>
+
+<meta name="description" content="Access Stripe in Server indexjs (Stripe Payments Integration 101)">
+<meta name="keywords" content="Access Stripe in Server indexjs (Stripe Payments Integration 101)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="CONCEPT-INDEX.html#CONCEPT-INDEX" rel="index" title="CONCEPT INDEX">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Set-Up-an-Express-Server.html#Set-Up-an-Express-Server" rel="up" title="Set Up an Express Server">
+<link href="Stripe-Customers.html#Stripe-Customers" rel="next" title="Stripe Customers">
+<link href="Set-Up-an-Express-Server.html#Set-Up-an-Express-Server" rel="prev" title="Set Up an Express Server">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+blockquote.smallindentedblock {margin-right: 0em; font-size: smaller}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<a name="Access-Stripe-in-Server-indexjs"></a>
+<div class="header">
+<p>
+Next: <a href="Stripe-Customers.html#Stripe-Customers" accesskey="n" rel="next">Stripe Customers</a>, Up: <a href="Set-Up-an-Express-Server.html#Set-Up-an-Express-Server" accesskey="u" rel="up">Set Up an Express Server</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="CONCEPT-INDEX.html#CONCEPT-INDEX" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Access-Stripe-in-Server-index_002ejs"></a>
+<h4 class="subsection">4.1.1 Access Stripe in Server <code>index.js</code></h4>
+
+<a name="index-index_002ejs"></a>
+<a name="index-Stripe_002c-access-from-server"></a>
+<a name="index-secret-key"></a>
+<a name="index-Dashboard-Developers-API-keys"></a>
+<a name="index-stripe_002eorders_002ecreate_0028_0029-function"></a>
+<p>In order to access Stripe, <code>require</code> <samp>Stripe.js</samp> and
+call it straight away with your Secret Key (you can find it in
+&lsquo;<samp>dashboard-&gt;Developers-&gt;Api keys</samp>&rsquo;), we will use
+<code>stripe.orders.create()</code> for passing the data we receive when the
+client calls our server to place an order.
+</p>
+
+
+
+</body>
+</html>

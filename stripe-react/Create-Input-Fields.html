@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Stripe Payments Integration 101 Roland Szőke January 29, 2019
+(C) 2019 -->
+<!-- Created by GNU Texinfo 6.5, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Create Input Fields (Stripe Payments Integration 101)</title>
+
+<meta name="description" content="Create Input Fields (Stripe Payments Integration 101)">
+<meta name="keywords" content="Create Input Fields (Stripe Payments Integration 101)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="CONCEPT-INDEX.html#CONCEPT-INDEX" rel="index" title="CONCEPT INDEX">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Handle-Orders-on-the-Front-End.html#Handle-Orders-on-the-Front-End" rel="up" title="Handle Orders on the Front End">
+<link href="Create-Products-and-Assign-SKUs.html#Create-Products-and-Assign-SKUs" rel="next" title="Create Products and Assign SKUs">
+<link href="Implement-State-of-Shop-Component.html#Implement-State-of-Shop-Component" rel="prev" title="Implement State of Shop Component">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+blockquote.smallindentedblock {margin-right: 0em; font-size: smaller}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<a name="Create-Input-Fields"></a>
+<div class="header">
+<p>
+Next: <a href="Create-Products-and-Assign-SKUs.html#Create-Products-and-Assign-SKUs" accesskey="n" rel="next">Create Products and Assign SKUs</a>, Previous: <a href="Implement-State-of-Shop-Component.html#Implement-State-of-Shop-Component" accesskey="p" rel="prev">Implement State of Shop Component</a>, Up: <a href="Handle-Orders-on-the-Front-End.html#Handle-Orders-on-the-Front-End" accesskey="u" rel="up">Handle Orders on the Front End</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="CONCEPT-INDEX.html#CONCEPT-INDEX" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Create-Input-Fields-1"></a>
+<h4 class="subsection">4.2.2 Create Input Fields</h4>
+
+<a name="index-input-fields_002c-create"></a>
+<a name="index-submit-button_002c-disable"></a>
+<p>Now we are ready to create the input fields. We should, of course,
+disable the submit button when the input fields are empty. Just
+the usual deal.
+</p>
+<a name="index-Shop_002ejs-5"></a>
+<div class="example">
+<pre class="example"> 1  // Shop.js
+ 2  render () {
+ 3    const state = this.state
+ 4    const fetching = state.fetching
+ 5    const cart = state.cart
+ 6    const address = state.address
+ 7    const submittable =
+ 8       (cart.banana !== 0 || cart.cucumber !== 0) &amp;&amp;
+ 9       state.email &amp;&amp;
+10       state.name &amp;&amp;
+11       address.line1 &amp;&amp;
+12       address.city &amp;&amp;
+13       address.state &amp;&amp;
+14       address.country &amp;&amp;
+15       address.postal_code
+16    return (
+17  // ...
+18      &lt;div&gt;
+19         Name: &lt;input type=&quot;text&quot; name=&quot;name&quot;
+20         onChange={this.handleChange}/&gt;
+21      &lt;/div&gt;
+22      &lt;div&gt;
+23         Email: &lt;input  type=&quot;text&quot; name=&quot;email&quot;
+24         onChange={this.handleChange}/&gt;
+25      &lt;/div&gt;
+26      &lt;div&gt;
+27         Address Line: &lt;input  type=&quot;text&quot; name=&quot;line1&quot;
+28         onChange={this.handleAddressChange}/&gt;
+29      &lt;/div&gt;
+30      &lt;div&gt;
+31         City: &lt;input  type=&quot;text&quot; name=&quot;city&quot;
+32         onChange={this.handleAddressChange}/&gt;
+33      &lt;/div&gt;
+34      &lt;div&gt;
+35         State: &lt;input  type=&quot;text&quot; name=&quot;state&quot;
+36         onChange={this.handleAddressChange}/&gt;
+37      &lt;/div&gt;
+38      &lt;div&gt;
+39         Country: &lt;input  type=&quot;text&quot; name=&quot;country&quot;
+40         onChange={this.handleAddressChange}/&gt;
+41      &lt;/div&gt;
+42      &lt;div&gt;
+43         Postal Code: &lt;input  type=&quot;text&quot; name=&quot;postal_code&quot;
+44         onChange={this.handleAddressChange}/&gt;
+45      &lt;/div&gt;
+46      &lt;div&gt;
+47         Coupon Code: &lt;input  type=&quot;text&quot; name=&quot;coupon&quot;
+48         onChange={this.handleChange}/&gt;
+49      &lt;/div&gt;
+50      {!fetching
+51        ? &lt;button type=&quot;submit&quot; disabled={!submittable}&gt;Purchase&lt;/button&gt;
+52        : 'Purchasing...'}
+53  // ...
+</pre></div>
+
+<a name="index-purchasable-items_002c-define"></a>
+<a name="index-Stock-Keeping-Unit-_0028SKU_0029"></a>
+<a name="index-SKU_002c-define-in-Stripe"></a>
+<a name="index-Dashboard_002c-define-SKU-in-Stripe"></a>
+<p>We also have to define purchasable items.  These items will be
+identified by a <a href="https://en.wikipedia.org/wiki/Stock_keeping_unit">Stock Keeping Unit</a> by Stripe, which can be created
+on the dashboard as well.
+</p>
+
+
+
+</body>
+</html>

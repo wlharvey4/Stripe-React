@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Stripe Payments Integration 101 Roland Szőke January 29, 2019
+(C) 2019 -->
+<!-- Created by GNU Texinfo 6.5, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Decrypting Request Body Sent by Stripe (Stripe Payments Integration 101)</title>
+
+<meta name="description" content="Decrypting Request Body Sent by Stripe (Stripe Payments Integration 101)">
+<meta name="keywords" content="Decrypting Request Body Sent by Stripe (Stripe Payments Integration 101)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="CONCEPT-INDEX.html#CONCEPT-INDEX" rel="index" title="CONCEPT INDEX">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Webhook-Notification-When-Order-Gets-Paid.html#Webhook-Notification-When-Order-Gets-Paid" rel="up" title="Webhook Notification When Order Gets Paid">
+<link href="Wrapping-It-Up.html#Wrapping-It-Up" rel="next" title="Wrapping It Up">
+<link href="Webhook-Setup-using-Stripe-Dashboard.html#Webhook-Setup-using-Stripe-Dashboard" rel="prev" title="Webhook Setup using Stripe Dashboard">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+blockquote.smallindentedblock {margin-right: 0em; font-size: smaller}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<a name="Decrypting-Request-Body-Sent-by-Stripe"></a>
+<div class="header">
+<p>
+Previous: <a href="Webhook-Setup-using-Stripe-Dashboard.html#Webhook-Setup-using-Stripe-Dashboard" accesskey="p" rel="prev">Webhook Setup using Stripe Dashboard</a>, Up: <a href="Webhook-Notification-When-Order-Gets-Paid.html#Webhook-Notification-When-Order-Gets-Paid" accesskey="u" rel="up">Webhook Notification When Order Gets Paid</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="CONCEPT-INDEX.html#CONCEPT-INDEX" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Decrypting-Request-Body-Sent-by-Stripe-1"></a>
+<h4 class="subsection">5.1.2 Decrypting Request Body Sent by Stripe</h4>
+
+<a name="index-decrypt-request-body"></a>
+<a name="index-webhook-secret"></a>
+<a name="index-secret_002c-webhook"></a>
+<a name="index-Dashboard_002c-webhooks"></a>
+<p>The data sent in the request body is encrypted and can only be
+decrypted by using a signature sent in the header and with the
+webhook secret that can be found on the webhooks dashboard.
+</p>
+<a name="index-bodyParser_002c-exception-to"></a>
+<a name="index-stripe_002ewebhooks_002econstructEvent_0028_0029-function"></a>
+<a name="index-message_002c-decrypt-using-Stripe-SDK"></a>
+<a name="index-decrypt-message-using-Stripe-SDK"></a>
+<a name="index-process-orders_002c-endpoint-for_002c-_002fapi_002fshop_002forder_002fprocess"></a>
+<p>This also means that we cannot simply use <code>bodyParser</code> to parse
+the body, so we need to add an exception to <code>bodyParser</code> so it
+will be bypassed when the URL starts with
+&lsquo;<samp>/api/shop/order/process</samp>&rsquo;. We need to use the
+<code>stripe.webhooks.constructEvent()</code> function instead, provided by
+the Stripe SDK to decrypt the message for us.
+</p>
+<a name="index-index_002ejs-3"></a>
+<div class="example">
+<pre class="example"> 1  // index.js
+ 2  const bodyParser = require('body-parser')
+ 3  
+ 4  app.use(bodyParser.json({
+ 5    verify: (req, res, buf) =&gt; {
+ 6      if (req.originalUrl.startsWith('/api/shop/order/process')) {
+ 7        req.rawBody = buf.toString()
+ 8      }
+ 9    }
+10  }))
+11  
+12  app.use(bodyParser.urlencoded({
+13    extended: false
+14  }))
+15  
+16  app.post('/api/shop/order/process', async (req, res) =&gt; {
+17    const sig = req.headers['stripe-signature']
+18    try {
+19      const event = await
+20         stripe.webhooks.
+21         constructEvent(req.rawBody, sig, 'whsec_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+22      console.log(`Processing Order : ${event.data.object.id}`)
+23      // Process payed order here
+24    } catch (err) {
+25      return res.sendStatus(500)
+26    }
+27    return res.sendStatus(200)
+28  })
+</pre></div>
+
+<a name="index-Salesforce-API"></a>
+<a name="index-Stamps-API"></a>
+<p>After an order was successfully paid, we can parse and send it to
+other APIs like Salesforce or Stamps to pack things up and get
+ready to send out.
+</p>
+
+
+
+</body>
+</html>

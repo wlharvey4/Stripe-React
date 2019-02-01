@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Stripe Payments Integration 101 Roland Szőke January 29, 2019
+(C) 2019 -->
+<!-- Created by GNU Texinfo 6.5, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Webhook Notification When Order Gets Paid (Stripe Payments Integration 101)</title>
+
+<meta name="description" content="Webhook Notification When Order Gets Paid (Stripe Payments Integration 101)">
+<meta name="keywords" content="Webhook Notification When Order Gets Paid (Stripe Payments Integration 101)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="CONCEPT-INDEX.html#CONCEPT-INDEX" rel="index" title="CONCEPT INDEX">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Setting-up-Stripe-Webhooks-to-Verify-Payments.html#Setting-up-Stripe-Webhooks-to-Verify-Payments" rel="up" title="Setting up Stripe Webhooks to Verify Payments">
+<link href="Webhook-Setup-using-Stripe-Dashboard.html#Webhook-Setup-using-Stripe-Dashboard" rel="next" title="Webhook Setup using Stripe Dashboard">
+<link href="Setting-up-Stripe-Webhooks-to-Verify-Payments.html#Setting-up-Stripe-Webhooks-to-Verify-Payments" rel="prev" title="Setting up Stripe Webhooks to Verify Payments">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+blockquote.smallindentedblock {margin-right: 0em; font-size: smaller}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<a name="Webhook-Notification-When-Order-Gets-Paid"></a>
+<div class="header">
+<p>
+Up: <a href="Setting-up-Stripe-Webhooks-to-Verify-Payments.html#Setting-up-Stripe-Webhooks-to-Verify-Payments" accesskey="u" rel="up">Setting up Stripe Webhooks to Verify Payments</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="CONCEPT-INDEX.html#CONCEPT-INDEX" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Webhook-Notification-When-Order-Gets-Paid-1"></a>
+<h3 class="section">5.1 Webhook Notification When Order Gets Paid</h3>
+
+<a name="index-notification-upon-payment_002c-webhook-for"></a>
+<a name="index-webhook-for-notification-of-payment"></a>
+<a name="index-API-endpoint-for-webhook-notification"></a>
+<a name="index-ngrok-service"></a>
+<a name="index-static-ip_002c-ngrok"></a>
+<p>In this example, we only want to be notified when an order gets
+paid. When it happens, Stripe can notify us by calling an endpoint
+on our API with an HTTP request containing the payment data in the
+request body. At the moment, we don&rsquo;t have a static IP, but we need
+a way to expose our local API to the public internet. We can use
+<a href="https://ngrok.com/download">Ngrok</a> for that. Just download it and run with <code>./ngrok http 3001</code>
+command to get an ngrok url pointing to our <code>localhost:3001</code>.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Webhook-Setup-using-Stripe-Dashboard.html#Webhook-Setup-using-Stripe-Dashboard" accesskey="1">Webhook Setup using Stripe Dashboard</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Decrypting-Request-Body-Sent-by-Stripe.html#Decrypting-Request-Body-Sent-by-Stripe" accesskey="2">Decrypting Request Body Sent by Stripe</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+
+
+
+</body>
+</html>

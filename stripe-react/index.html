@@ -1,0 +1,287 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Stripe Payments Integration 101 Roland Szőke January 29, 2019
+(C) 2019 -->
+<!-- Created by GNU Texinfo 6.5, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Top (Stripe Payments Integration 101)</title>
+
+<meta name="description" content="Top (Stripe Payments Integration 101)">
+<meta name="keywords" content="Top (Stripe Payments Integration 101)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="#Top" rel="start" title="Top">
+<link href="CONCEPT-INDEX.html#CONCEPT-INDEX" rel="index" title="CONCEPT INDEX">
+<link href="#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="../dir/index.html" rel="up" title="(dir)">
+<link href="Introduction.html#Introduction" rel="next" title="Introduction">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+blockquote.smallindentedblock {margin-right: 0em; font-size: smaller}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<h1 class="settitle" align="center">Stripe Payments Integration 101</h1>
+
+
+
+
+<a name="SEC_Contents"></a>
+<h2 class="contents-heading">Table of Contents</h2>
+
+<div class="contents">
+
+<ul class="no-bullet">
+  <li><a name="toc-Introduction-1" href="Introduction.html#Introduction">1 Introduction</a>
+  <ul class="no-bullet">
+    <li><a name="toc-About-The-Author-1" href="About-The-Author.html#About-The-Author">1.1 About The Author</a></li>
+    <li><a name="toc-About-the-Project-1" href="About-the-Project.html#About-the-Project">1.2 About the Project</a></li>
+  </ul></li>
+  <li><a name="toc-The-Basics-of-Stripe-Payments-Integration-1" href="The-Basics-of-Stripe-Payments-Integration.html#The-Basics-of-Stripe-Payments-Integration">2 The Basics of Stripe Payments Integration</a>
+  <ul class="no-bullet">
+    <li><a name="toc-Stripe-Setup-and-Dashboard-1" href="Stripe-Setup-and-Dashboard.html#Stripe-Setup-and-Dashboard">2.1 Stripe Setup and Dashboard</a>
+    <ul class="no-bullet">
+      <li><a name="toc-Signup-To-Stripe-1" href="Signup-To-Stripe.html#Signup-To-Stripe">2.1.1 Signup To Stripe</a></li>
+      <li><a name="toc-Create-a-New-Coupon-or-Product-1" href="Create-a-New-Coupon-or-Product.html#Create-a-New-Coupon-or-Product">2.1.2 Create a New Coupon or Product</a></li>
+      <li><a name="toc-Integrate-Stripe-Into-a-Product-1" href="Integrate-Stripe-Into-a-Product.html#Integrate-Stripe-Into-a-Product">2.1.3 Integrate Stripe Into a Product</a></li>
+      <li><a name="toc-Stripe-Developers-Section-1" href="Stripe-Developers-Section.html#Stripe-Developers-Section">2.1.4 Stripe Developers Section</a></li>
+    </ul></li>
+  </ul></li>
+  <li><a name="toc-Creating-a-Webshop-in-React-with-Charges-1" href="Creating-a-Webshop-in-React-with-Charges.html#Creating-a-Webshop-in-React-with-Charges">3 Creating a Webshop in React with Charges</a>
+  <ul class="no-bullet">
+    <li><a name="toc-Steps-for-Creating-a-Webshop-1" href="Steps-for-Creating-a-Webshop.html#Steps-for-Creating-a-Webshop">3.1 Steps for Creating a Webshop</a></li>
+    <li><a name="toc-Terminal-Commands-To-Build-the-React-App-1" href="Terminal-Commands-To-Build-the-React-App.html#Terminal-Commands-To-Build-the-React-App">3.2 Terminal Commands To Build the React App</a>
+    <ul class="no-bullet">
+      <li><a name="toc-Create-the-React-App-and-Install-Stripe-Elements-and-Axios-1" href="Create-the-React-App-and-Install-Stripe-Elements-and-Axios.html#Create-the-React-App-and-Install-Stripe-Elements-and-Axios">3.2.1 Create the React App and Install Stripe Elements and Axios</a></li>
+      <li><a name="toc-Add-Stripe_002ejs-Code-to-index_002ehtml-File" href="Add-Stripejs-Code-to-indexhtml-File.html#Add-Stripejs-Code-to-indexhtml-File">3.2.2 Add <code>Stripe.js</code> Code to <code>index.html</code> File</a></li>
+    </ul></li>
+    <li><a name="toc-Coding-the-App-1" href="Coding-the-App.html#Coding-the-App">3.3 Coding the App</a>
+    <ul class="no-bullet">
+      <li><a name="toc-Stripe-Object-in-Root-React-Component-App_002ejs" href="Stripe-Object-in-Root-React-Component-Appjs.html#Stripe-Object-in-Root-React-Component-Appjs">3.3.1 Stripe Object in Root React Component <samp>App.js</samp></a></li>
+      <li><a name="toc-Implementation-of-Shop_002ejs-Component" href="Implementation-of-Shopjs-Component.html#Implementation-of-Shopjs-Component">3.3.2 Implementation of <samp>Shop.js</samp> Component</a></li>
+      <li><a name="toc-Explanation-of-Shop_002ejs" href="Explanation-of-Shopjs.html#Explanation-of-Shopjs">3.3.3 Explanation of <samp>Shop.js</samp></a></li>
+      <li><a name="toc-POST-Request-to-Stripe-1" href="POST-Request-to-Stripe.html#POST-Request-to-Stripe">3.3.4 POST Request to Stripe</a></li>
+      <li><a name="toc-Charge-a-Credit-Card-in-Shop_002ejs" href="Charge-a-Credit-Card-in-Shopjs.html#Charge-a-Credit-Card-in-Shopjs">3.3.5 Charge a Credit Card in <samp>Shop.js</samp></a></li>
+    </ul></li>
+  </ul></li>
+  <li><a name="toc-Placing-an-Order-With-Stripe-1" href="Placing-an-Order-With-Stripe.html#Placing-an-Order-With-Stripe">4 Placing an Order With Stripe</a>
+  <ul class="no-bullet">
+    <li><a name="toc-Set-Up-an-Express-Server-1" href="Set-Up-an-Express-Server.html#Set-Up-an-Express-Server">4.1 Set Up an Express Server</a>
+    <ul class="no-bullet">
+      <li><a name="toc-Access-Stripe-in-Server-index_002ejs" href="Access-Stripe-in-Server-indexjs.html#Access-Stripe-in-Server-indexjs">4.1.1 Access Stripe in Server <code>index.js</code></a></li>
+      <li><a name="toc-Stripe-Customers-1" href="Stripe-Customers.html#Stripe-Customers">4.1.2 Stripe Customers</a></li>
+      <li><a name="toc-Use-Card-Token-as-Source-1" href="Use-Card-Token-as-Source.html#Use-Card-Token-as-Source">4.1.3 Use Card Token as &lsquo;<samp>Source</samp>&rsquo;</a></li>
+      <li><a name="toc-Implement-CC-Charges-in-index_002ejs" href="Implement-CC-Charges-in-indexjs.html#Implement-CC-Charges-in-indexjs">4.1.4 Implement CC Charges in <code>index.js</code></a></li>
+    </ul></li>
+    <li><a name="toc-Handle-Orders-on-the-Front-End-1" href="Handle-Orders-on-the-Front-End.html#Handle-Orders-on-the-Front-End">4.2 Handle Orders on the Front End</a>
+    <ul class="no-bullet">
+      <li><a name="toc-Implement-State-of-Shop-Component-1" href="Implement-State-of-Shop-Component.html#Implement-State-of-Shop-Component">4.2.1 Implement State of Shop Component</a></li>
+      <li><a name="toc-Create-Input-Fields-1" href="Create-Input-Fields.html#Create-Input-Fields">4.2.2 Create Input Fields</a></li>
+      <li><a name="toc-Create-Products-and-Assign-SKUs-1" href="Create-Products-and-Assign-SKUs.html#Create-Products-and-Assign-SKUs">4.2.3 Create Products and Assign SKUs</a></li>
+      <li><a name="toc-Add-Products-to-the-Webshop-1" href="Add-Products-to-the-Webshop.html#Add-Products-to-the-Webshop">4.2.4 Add Products to the Webshop</a></li>
+      <li><a name="toc-Send-Orders-to-Stripe-API-on-Submit-1" href="Send-Orders-to-Stripe-API-on-Submit.html#Send-Orders-to-Stripe-API-on-Submit">4.2.5 Send Orders to Stripe API on Submit</a></li>
+      <li><a name="toc-Create-a-Coupon-for-Testing-1" href="Create-a-Coupon-for-Testing.html#Create-a-Coupon-for-Testing">4.2.6 Create a Coupon for Testing</a></li>
+    </ul></li>
+  </ul></li>
+  <li><a name="toc-Setting-up-Stripe-Webhooks-to-Verify-Payments-1" href="Setting-up-Stripe-Webhooks-to-Verify-Payments.html#Setting-up-Stripe-Webhooks-to-Verify-Payments">5 Setting up Stripe Webhooks to Verify Payments</a>
+  <ul class="no-bullet">
+    <li><a name="toc-Webhook-Notification-When-Order-Gets-Paid-1" href="Webhook-Notification-When-Order-Gets-Paid.html#Webhook-Notification-When-Order-Gets-Paid">5.1 Webhook Notification When Order Gets Paid</a>
+    <ul class="no-bullet">
+      <li><a name="toc-Webhook-Setup-using-Stripe-Dashboard-1" href="Webhook-Setup-using-Stripe-Dashboard.html#Webhook-Setup-using-Stripe-Dashboard">5.1.1 Webhook Setup using Stripe Dashboard</a></li>
+      <li><a name="toc-Decrypting-Request-Body-Sent-by-Stripe-1" href="Decrypting-Request-Body-Sent-by-Stripe.html#Decrypting-Request-Body-Sent-by-Stripe">5.1.2 Decrypting Request Body Sent by Stripe</a></li>
+    </ul></li>
+  </ul></li>
+  <li><a name="toc-Wrapping-It-Up-1" href="Wrapping-It-Up.html#Wrapping-It-Up">6 Wrapping It Up</a></li>
+  <li><a name="toc-LIST-OF-FIGURES-1" href="LIST-OF-FIGURES.html#LIST-OF-FIGURES">LIST OF FIGURES</a></li>
+  <li><a name="toc-LIST-OF-CODE-FRAGMENTS-1" href="LIST-OF-CODE-FRAGMENTS.html#LIST-OF-CODE-FRAGMENTS">LIST OF CODE FRAGMENTS</a></li>
+  <li><a name="toc-CONCEPT-INDEX-1" href="CONCEPT-INDEX.html#CONCEPT-INDEX">CONCEPT INDEX</a></li>
+  <li><a name="toc-SOURCE-INDEX-1" href="SOURCE-INDEX.html#SOURCE-INDEX">SOURCE INDEX</a></li>
+</ul>
+</div>
+
+
+<a name="Top"></a>
+<div class="header">
+<p>
+Next: <a href="Introduction.html#Introduction" accesskey="n" rel="next">Introduction</a>, Up: <a href="../dir/index.html" accesskey="u" rel="up">(dir)</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="CONCEPT-INDEX.html#CONCEPT-INDEX" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Stripe-Payments-Integration-101"></a>
+<h1 class="top">Stripe Payments Integration 101</h1>
+
+<p>Sample app, detailed guidance &amp; best practices to help you get started
+with Stripe Payments integration as a JavaScript developer.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Introduction.html#Introduction" accesskey="1">Introduction</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="The-Basics-of-Stripe-Payments-Integration.html#The-Basics-of-Stripe-Payments-Integration" accesskey="2">The Basics of Stripe Payments Integration</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Creating-a-Webshop-in-React-with-Charges.html#Creating-a-Webshop-in-React-with-Charges" accesskey="3">Creating a Webshop in React with Charges</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Placing-an-Order-With-Stripe.html#Placing-an-Order-With-Stripe" accesskey="4">Placing an Order With Stripe</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Setting-up-Stripe-Webhooks-to-Verify-Payments.html#Setting-up-Stripe-Webhooks-to-Verify-Payments" accesskey="5">Setting up Stripe Webhooks to Verify Payments</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Wrapping-It-Up.html#Wrapping-It-Up" accesskey="6">Wrapping It Up</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="LIST-OF-FIGURES.html#LIST-OF-FIGURES" accesskey="7">LIST OF FIGURES</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="LIST-OF-CODE-FRAGMENTS.html#LIST-OF-CODE-FRAGMENTS" accesskey="8">LIST OF CODE FRAGMENTS</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="CONCEPT-INDEX.html#CONCEPT-INDEX" accesskey="9">CONCEPT INDEX</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="SOURCE-INDEX.html#SOURCE-INDEX">SOURCE INDEX</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+</pre></th></tr><tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">&mdash; The Detailed Node Listing &mdash;
+
+Introduction
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="About-The-Author.html#About-The-Author">About The Author</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="About-the-Project.html#About-the-Project">About the Project</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+The Basics of Stripe Payments Integration
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Stripe-Setup-and-Dashboard.html#Stripe-Setup-and-Dashboard">Stripe Setup and Dashboard</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Stripe Setup and Dashboard
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Signup-To-Stripe.html#Signup-To-Stripe">Signup To Stripe</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Create-a-New-Coupon-or-Product.html#Create-a-New-Coupon-or-Product">Create a New Coupon or Product</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Integrate-Stripe-Into-a-Product.html#Integrate-Stripe-Into-a-Product">Integrate Stripe Into a Product</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Stripe-Developers-Section.html#Stripe-Developers-Section">Stripe Developers Section</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Creating a Webshop in React with Charges
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Steps-for-Creating-a-Webshop.html#Steps-for-Creating-a-Webshop">Steps for Creating a Webshop</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Terminal-Commands-To-Build-the-React-App.html#Terminal-Commands-To-Build-the-React-App">Terminal Commands To Build the React App</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Coding-the-App.html#Coding-the-App">Coding the App</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Terminal Commands To Build the React App
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Create-the-React-App-and-Install-Stripe-Elements-and-Axios.html#Create-the-React-App-and-Install-Stripe-Elements-and-Axios">Create the React App and Install Stripe Elements and Axios</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Add-Stripejs-Code-to-indexhtml-File.html#Add-Stripejs-Code-to-indexhtml-File">Add <code>Stripe.js</code> Code to <code>index.html</code> File</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Coding the App
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Stripe-Object-in-Root-React-Component-Appjs.html#Stripe-Object-in-Root-React-Component-Appjs">Stripe Object in Root React Component <samp>App.js</samp></a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Implementation-of-Shopjs-Component.html#Implementation-of-Shopjs-Component">Implementation of <samp>Shop.js</samp> Component</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Explanation-of-Shopjs.html#Explanation-of-Shopjs">Explanation of <samp>Shop.js</samp></a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="POST-Request-to-Stripe.html#POST-Request-to-Stripe">POST Request to Stripe</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Charge-a-Credit-Card-in-Shopjs.html#Charge-a-Credit-Card-in-Shopjs">Charge a Credit Card in <samp>Shop.js</samp></a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Placing an Order With Stripe
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Set-Up-an-Express-Server.html#Set-Up-an-Express-Server">Set Up an Express Server</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Handle-Orders-on-the-Front-End.html#Handle-Orders-on-the-Front-End">Handle Orders on the Front End</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Set Up an Express Server
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Access-Stripe-in-Server-indexjs.html#Access-Stripe-in-Server-indexjs">Access Stripe in Server <code>index.js</code></a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Stripe-Customers.html#Stripe-Customers">Stripe Customers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Use-Card-Token-as-Source.html#Use-Card-Token-as-Source">Use Card Token as &lsquo;<samp>Source</samp>&rsquo;</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Implement-CC-Charges-in-indexjs.html#Implement-CC-Charges-in-indexjs">Implement CC Charges in <code>index.js</code></a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Handle Orders on the Front End
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Implement-State-of-Shop-Component.html#Implement-State-of-Shop-Component">Implement State of Shop Component</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Create-Input-Fields.html#Create-Input-Fields">Create Input Fields</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Create-Products-and-Assign-SKUs.html#Create-Products-and-Assign-SKUs">Create Products and Assign SKUs</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Add-Products-to-the-Webshop.html#Add-Products-to-the-Webshop">Add Products to the Webshop</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Send-Orders-to-Stripe-API-on-Submit.html#Send-Orders-to-Stripe-API-on-Submit">Send Orders to Stripe API on Submit</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Create-a-Coupon-for-Testing.html#Create-a-Coupon-for-Testing">Create a Coupon for Testing</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Setting up Stripe Webhooks to Verify Payments
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Webhook-Notification-When-Order-Gets-Paid.html#Webhook-Notification-When-Order-Gets-Paid">Webhook Notification When Order Gets Paid</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Webhook Notification When Order Gets Paid
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Webhook-Setup-using-Stripe-Dashboard.html#Webhook-Setup-using-Stripe-Dashboard">Webhook Setup using Stripe Dashboard</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Decrypting-Request-Body-Sent-by-Stripe.html#Decrypting-Request-Body-Sent-by-Stripe">Decrypting Request Body Sent by Stripe</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+</pre></th></tr></table>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="Introduction.html#Introduction" accesskey="n" rel="next">Introduction</a>, Up: <a href="../dir/index.html" accesskey="u" rel="up">(dir)</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="CONCEPT-INDEX.html#CONCEPT-INDEX" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

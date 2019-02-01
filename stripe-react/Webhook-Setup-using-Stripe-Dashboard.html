@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Stripe Payments Integration 101 Roland Szőke January 29, 2019
+(C) 2019 -->
+<!-- Created by GNU Texinfo 6.5, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Webhook Setup using Stripe Dashboard (Stripe Payments Integration 101)</title>
+
+<meta name="description" content="Webhook Setup using Stripe Dashboard (Stripe Payments Integration 101)">
+<meta name="keywords" content="Webhook Setup using Stripe Dashboard (Stripe Payments Integration 101)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="CONCEPT-INDEX.html#CONCEPT-INDEX" rel="index" title="CONCEPT INDEX">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Webhook-Notification-When-Order-Gets-Paid.html#Webhook-Notification-When-Order-Gets-Paid" rel="up" title="Webhook Notification When Order Gets Paid">
+<link href="Decrypting-Request-Body-Sent-by-Stripe.html#Decrypting-Request-Body-Sent-by-Stripe" rel="next" title="Decrypting Request Body Sent by Stripe">
+<link href="Webhook-Notification-When-Order-Gets-Paid.html#Webhook-Notification-When-Order-Gets-Paid" rel="prev" title="Webhook Notification When Order Gets Paid">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+blockquote.smallindentedblock {margin-right: 0em; font-size: smaller}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<a name="Webhook-Setup-using-Stripe-Dashboard"></a>
+<div class="header">
+<p>
+Next: <a href="Decrypting-Request-Body-Sent-by-Stripe.html#Decrypting-Request-Body-Sent-by-Stripe" accesskey="n" rel="next">Decrypting Request Body Sent by Stripe</a>, Up: <a href="Webhook-Notification-When-Order-Gets-Paid.html#Webhook-Notification-When-Order-Gets-Paid" accesskey="u" rel="up">Webhook Notification When Order Gets Paid</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="CONCEPT-INDEX.html#CONCEPT-INDEX" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Webhook-Setup-using-Stripe-Dashboard-1"></a>
+<h4 class="subsection">5.1.1 Webhook Setup using Stripe Dashboard</h4>
+
+<a name="index-Dashboard_002c-webhook-integration"></a>
+<a name="index-Developers-Dashboard-Webhooks"></a>
+<a name="index-Webhooks-Developers-Dashboard"></a>
+<a name="index-endpoint_002c-add-to-Dashboard"></a>
+<a name="index-Add-Endpoint_002c-Webhooks"></a>
+<a name="index-ngrok-endpoint_002c-add"></a>
+<p>We also have to set up our webhook on the Stripe dashboard. Go to
+<strong>Developers -&gt; Webhooks</strong>, click on &lsquo;<samp>Add endpoint</samp>&rsquo; and type in your
+ngrok url followed by the endpoint to be called
+e.g. &lsquo;<samp>http://92832de0.ngrok.io/api/shop/order/process</samp>&rsquo;. Then under
+<strong>Filter event</strong> select &lsquo;<samp>Select types to send</samp>&rsquo; and search for
+<code>order.payment_succeeded</code>.
+</p>
+<div class="float"><a name="orge0e0a14"></a>
+<img src="img/Stripe-Dashboard-Webhook-Creation-50.png" alt="img/Stripe-Dashboard-Webhook-Creation-50">
+
+<div class="float-caption"><p><strong>Figure 5.1: </strong>Stripe Dashboard Webhook Creation</p></div></div>
+
+
+
+</body>
+</html>
