@@ -3,6 +3,9 @@
 #+AUTHOR:Roland Szőke
 #+DATE:January 29, 2019
 
+Sample app, detailed guidance & best practices to help you get started
+with Stripe Payments integration as a JavaScript developer.
+
 * Introduction
 
   In this article, I’ll show how you can create a simple webshop using
@@ -206,12 +209,655 @@
    The ~<Shop/>~ is the implementation of our shop form as you can see
    from ~import Shop from './Shop'~.  We'll go into the details later.
 
-*** Implementation of {{{file(Shop.js)}}}
+*** {{{file(Shop.js)}}} Component
 
    As you can see the ~<Shop/>~ is wrapped in ~<Elements>~ imported
    from {{{file(react-stripe-elements)}}} so that you can use
    ~injectStripe~ in your components. To shed some light on this,
    let's take a look at our implementation in {{{file(Shop.js)}}}.
+
+#+BEGIN_SRC js -n
+ // Shop.js
+import React, { Component } from 'react'
+import { CardElement } from 'react-stripe-elements'
+import PropTypes from 'prop-types'
+import axios from 'axios'
+import qs from 'query-string-object'
+
+const prices = {
+  banana: 150,
+  cucumber: 100
+}
+
+class Shop extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      fetching: false,
+      cart: {
+        banana: 0,
+        cucumber: 0
+      }
+    }
+    this.handleCartChange = this.handleCartChange.bind(this)
+    this.handleCartReset = this.handleCartReset.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+  }
+
+  handleCartChange(evt) {
+    evt.preventDefault()
+    const cart = this.state.cart
+    cart[evt.target.name]+= parseInt(evt.target.value)
+    this.setState({cart})
+  }
+
+  handleCartReset(evt) {
+    evt.preventDefault()
+    this.setState({cart:{banana: 0, cucumber: 0}})
+  }
+
+  handleSubmit(evt) {
+    // TODO
+  }
+
+  render () {
+    const cart = this.state.cart
+    const fetching = this.state.fetching
+    return (
+      <form onSubmit={this.handleSubmit}
+            style={{width: '550px', margin: '20px',
+                    padding: '10px', border: '2px solid lightseagreen',
+                    borderRadius: '10px'}}>
+        <div>
+          Banana {(prices.banana / 100).toLocaleString('en-US',
+                 {style: 'currency', currency: 'usd'})}:
+          <div>
+            <button name="banana" value={1}
+               onClick={this.handleCartChange}>
+               +
+            </button>
+            <button name="banana" value={-1}
+               onClick={this.handleCartChange}
+               disabled={cart.banana <= 0}>
+               -
+            </button>
+            {cart.banana}
+          </div>
+        </div>
+        <div>
+          Cucumber {(prices.cucumber / 100).toLocaleString('en-US',
+                   {style: 'currency', currency: 'usd'})}:
+          <div>
+            <button name="cucumber" value={1}
+               onClick={this.handleCartChange}>
+               +
+            </button>
+            <button name="cucumber" value={-1}
+               onClick={this.handleCartChange} disabled={cart.cucumber <= 0}>
+               -
+            </button>
+            {cart.cucumber}
+          </div>
+        </div>
+        <button onClick={this.handleCartReset}> Reset Cart </button>
+        <div style={{width: '450px', margin: '10px',
+                     padding: '5px', border: '2px solid green',
+                     borderRadius: '10px'}}>
+           <CardElement style={{base: {fontSize: '18px'}}}/>
+        </div>
+        {!fetching
+          ? <button type="submit"
+             disabled={cart.banana === 0 &&
+             cart.cucumber === 0}>Purchase</button>
+          : 'Purchasing...'
+        }
+        Price:
+          {((cart.banana * prices.banana + cart.cucumber * prices.cucumber) / 100)
+               .toLocaleString('en-US',
+              {style: 'currency', currency: 'usd'})}
+      </form>
+    )
+  }
+}
+
+Shop.propTypes = {
+  stripe: PropTypes.shape({
+    createToken: PropTypes.func.isRequired
+  }).isRequired
+}
+#+END_SRC
+
+*** Explanation of {{{file(Shop.js)}}}
+
+    {{{heading(Simple React Form)}}}
+
+    The ~Shop~ is a simple React form with purchasable elements:
+    =Banana= and =Cucumber=, and with a quantity =increase/decrease=
+    button for each. Clicking the buttons will change their respective
+    amount in ~this.state.cart~.
+
+    {{{subheading(Presentation)}}}
+
+    There is a =submit= button below, and the current total price of
+    the cart is printed at the very bottom of the form.  Price will
+    expect the prices in cents, so we store them as cents, but of
+    course, we want to present them to the user in dollars.  We prefer
+    them to be shown to the second decimal place, e.g. $2.50 instead
+    of $2.5. To achieve this, we can use the built-in
+    ~toLocaleString()~ function to format the prices.
+
+    {{{heading(Stripe Form for Card Details: ~<CardElement/>~)}}}
+
+    Now comes the Stripe-specific part: we need to add a form element
+    so users can enter their card details. To achieve this, we only
+    need to add ~<CardElement/>~ from
+    {{{file(react-stripe-elements)}}} and that's it. I've also added a
+    bit of low effort inline =css= to make this shop at least somewhat
+    pleasing to the eye.
+
+    {{{heading(Pass Sripe Object As Prop to the ~Shop~)}}}
+
+    We also need to use the ~injectStripe~ Higher-Order-Component in
+    order to pass the ~Stripe~ object as a prop to the ~<Shop/>~
+    component, so we can call Stripe's ~createToken()~ function in
+    ~handleSubmit~ to tokenize the user's card, so they can be
+    charged.  Once we receive the tokenized card from Stripe, we are
+    ready to charge it.
+
+    #+BEGIN_SRC js -n
+    // Shop.js
+    import { injectStripe } from 'react-stripe-elements'
+    export default injectStripe(Shop)
+    #+END_SRC
+
+    For now let's just keep it simple and charge the card by sending a
+    ~POST~ request to =https://api.stripe.com/v1/charges= with
+    specifying the payment ~source~ (this is the token id), the charge
+    ~amount~ (of the charge) and the ~currency~ as described in the
+    Stripe API.
+
+    We need to send the API key in the header for authorization. We
+    can create a restricted API key on the dashboard in the
+    *Developers* menu. Set the permission for charges to "Read and
+    write" as shown in [[fig:restricted-api-key]], below.
+
+    *Do not forget:. You should never use your swiss army Secret key
+    on the client!*
+
+    #+ATTR_HTML: :width 75%
+    #+ATTR_TEXINFO: :width 6in
+    #+NAME:fig:restricted-api-key
+    #+CAPTION:Restricted API Key in the Dashboard Developers Menu
+    [[file:img/Stripe-Dashboard-API-Key-Restricted.png]]
+
+*** {{{file(Shop.js)}}} In Action
+
+    #+BEGIN_SRC js -n
+    // Shop.js
+    // ...
+    const stripeAuthHeader = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization': `Bearer rk_test_xxxxxxxxxxxxxxxxxxxxxxxx`
+    }
+
+    class Shop extends Component {
+      // ...
+      handleSubmit(evt) {
+        evt.preventDefault()
+        this.setState({fetching: true})
+        const cart = this.state.cart
+
+        this.props.stripe.createToken().then(({token}) => {
+            const price =
+               cart.banana * prices.banana + cart.cucumber * prices.cucumber
+            axios.post(`https://api.stripe.com/v1/charges`,
+            qs.stringify({
+              source: token.id,
+              amount: price,
+              currency: 'usd'
+            }),
+            { headers: stripeAuthHeader })
+            .then((resp) => {
+              this.setState({fetching: false})
+              alert(`Thank you for your purchase! You card has been charged with: \
+                ${(resp.data.amount / 100).toLocaleString('en-US',
+                {style: 'currency', currency: 'usd'})}`)
+            })
+            .catch(error => {
+              this.setState({fetching: false})
+              console.log(error)
+            })
+        }).catch(error => {
+          this.setState({fetching: false})
+          console.log(error)
+        })
+      }
+      // ...
+    }
+    #+END_SRC
+
+    For testing purposes you can use these [[https://stripe.com/docs/testing#international-cards][international cards]] provided by Stripe.
+
+    Looks good, we can already create tokens from cards and charge
+    them, but how should we know who bought what and where should we
+    send the package?  Thats where products and orders come in.
+
+* Placing an Order With Stripe
+
+  Implementing a simple charging method is a good start, but we will
+  need to take it a step further to create orders. To do so, we have
+  to set up a server and expose an API which handles those orders and
+  accepts webhooks from Stripe to process them once they got paid.
+
+  We will use [[https://expressjs.com/][express]] to handle the routes of our API. You can find a
+  list below of a couple of other node packages to get started. Let's
+  create a new root folder and get started.
+  : npm install express stripe body-parser cors helmet
+
+  The skeleton is a simple express "Hello World" using [[https://www.npmjs.com/package/cors][CORS]] so that the
+  browser won't panic when we try to reach our PI server that resides
+  and [[https://www.npmjs.com/package/helmet][Helmet]] to set a bunch of security headers automatically for us.
+
+  #+NAME:src:index.js-app
+  #+CAPTION:Initial Framework for App ~index.js~
+  #+BEGIN_SRC js -n
+// index.js
+const express = require('express')
+const helmet = require('helmet')
+const cors = require('cors')
+const app = express()
+const port = 3001
+
+app.use(helmet())
+
+app.use(cors({
+  origin: [/http:\/\/localhost:\d+$/],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}))
+
+app.get('/api/', (req, res) => res.send({ version: '1.0' }))
+
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+  #+END_SRC
+
+  In order to access Stripe, ~require~ {{{file(Stripe.js)}}} and call
+  it straight away with your Secret Key (you can find it in
+  =dashboard->Developers->Api keys=), we will use
+  ~stripe.orders.create()~ for passing the data we receive when the
+  client calls our server to place an order.
+
+  The orders will not be paid automatically. To charge the customer we
+  can either use a =Source= directly such as a *Card Token ID* or we can
+  create a [[https://stripe.com/docs/api/customers/create][Stripe Customer]].
+
+  The added benefit of creating a Stripe customer is that we can track
+  multiple charges, or create recurring charges for them and also
+  instruct Stripe to store the shipping data and other necessary
+  information to fulfill the order.
+
+  You probably want to create Customers from Card Tokens and shipping
+  data even when your application already handles users. This way you
+  can attach permanent or seasonal discount to those Customers, allow
+  them to shop any time with a single click and [[https://stripe.com/docs/api/orders/list][list their orders]] on
+  your UI.
+
+  For now let's keep it simple anyway and use the Card Token as our
+  =Source= calling ~stripe.orders.pay()~ once the order is
+  successfully created.
+
+  In a real-world scenario, you probably want to separate the order
+  creation from payment by exposing them on different endpoints, so if
+  the payment fails the Client can try again later without having to
+  recreate the order. However, we still have a lot to cover, so let's
+  not overcomplicate things.
+
+  #+NAME:src:index.js-post
+  #+CAPTION:App Post Function
+  #+BEGIN_SRC js -n
+/ index.js
+const stripe = require('stripe')('sk_test_xxxxxxxxxxxxxxxxxxxxxx')
+
+app.post('/api/shop/order', async (req, res) => {
+  const order = req.body.order
+  const source = req.body.source
+  try {
+    const stripeOrder = await stripe.orders.create(order)
+    console.log(`Order created: ${stripeOrder.id}`)
+    await stripe.orders.pay(stripeOrder.id, {source})
+  } catch (err) {
+    // Handle stripe errors here: No such coupon, sku, ect
+    console.log(`Order error: ${err}`)
+    return res.sendStatus(404)
+  }
+  return res.sendStatus(200)
+})
+  #+END_SRC
+
+  Now we're able to handle orders on the backend, but we also need to
+  implement this on the UI.
+
+  First, let's implement the state of the ~<Shop/>~ as an object the
+  Stripe API expects.
+
+  You can find out how an order request should look like [[https://stripe.com/docs/api/orders/create][here]]. We'll
+  need an =address= object with =line1=, =city=, =state=, =country=,
+  =postal_code= fields, a =name=, an =email= and a =coupon= field, to
+  get our customers ready for coupon hunting.
+
+  #+BEGIN_SRC js -n
+// Shop.js
+class Shop extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      fetching: false,
+      cart: {
+        banana: 0,
+        cucumber: 0
+      },
+      coupon: '',
+      email: '',
+      name: '',
+      address : {
+        line1: '',
+        city: '',
+        state: '',
+        country: '',
+        postal_code: ''
+      }
+    }
+    this.handleCartChange = this.handleCartChange.bind(this)
+    this.handleCartReset = this.handleCartReset.bind(this)
+    this.handleAddressChange = this.handleAddressChange.bind(this)
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+  }
+
+  handleChange(evt) {
+    evt.preventDefault()
+    this.setState({[evt.target.name]: evt.target.value})
+  }
+
+  handleAddressChange(evt) {
+    evt.preventDefault()
+    const address = this.state.address
+    address[evt.target.name] = evt.target.value
+    this.setState({address})
+  }
+  // ...
+}
+  #+END_SRC
+
+  Now we are ready to create the input fields. We should, of course,
+  disable the submit button when the input fields are empty. Just the
+  usual deal.
+
+  #+BEGIN_SRC js -n
+// Shop.js
+render () {
+  const state = this.state
+  const fetching = state.fetching
+  const cart = state.cart
+  const address = state.address
+  const submittable =
+     (cart.banana !== 0 || cart.cucumber !== 0) &&
+     state.email &&
+     state.name &&
+     address.line1 &&
+     address.city &&
+     address.state &&
+     address.country &&
+     address.postal_code
+  return (
+// ...
+    <div>
+       Name: <input type="text" name="name"
+       onChange={this.handleChange}/>
+    </div>
+    <div>
+       Email: <input  type="text" name="email"
+       onChange={this.handleChange}/>
+    </div>
+    <div>
+       Address Line: <input  type="text" name="line1"
+       onChange={this.handleAddressChange}/>
+    </div>
+    <div>
+       City: <input  type="text" name="city"
+       onChange={this.handleAddressChange}/>
+    </div>
+    <div>
+       State: <input  type="text" name="state"
+       onChange={this.handleAddressChange}/>
+    </div>
+    <div>
+       Country: <input  type="text" name="country"
+       onChange={this.handleAddressChange}/>
+    </div>
+    <div>
+       Postal Code: <input  type="text" name="postal_code"
+       onChange={this.handleAddressChange}/>
+    </div>
+    <div>
+       Coupon Code: <input  type="text" name="coupon"
+       onChange={this.handleChange}/>
+    </div>
+    {!fetching
+      ? <button type="submit" disabled={!submittable}>Purchase</button>
+      : 'Purchasing...'}
+// ...
+  #+END_SRC
+
+  We also have to define purchasable items.  These items will be
+  identified by a [[https://en.wikipedia.org/wiki/Stock_keeping_unit][Stock Keeping Unit]] by Stripe, which can be created
+  on the dashboard as well.
+
+  First, we have to create the Products (=Banana= and =Cucumber= on
+  =dashboard->Orders->Products=) and then assign an SKU to them (click
+  on the created product and =Add SKU= in the *Inventory* group). An SKU
+  specifies the products including its properties - size, color,
+  quantity, and prices -, so a product can have multiple SKUs.
+
+  #+ATTR_HTML: :width 75%
+  #+ATTR_TEXINFO: :width 6in
+  #+NAME:fig:create-products
+  #+CAPTION:Create a Product
+  [[file:img/stripe-payments-dashboard-banana-product-creation.png]]
+
+  #+ATTR_HTML: :width 75%
+  #+ATTR_TEXINFO: :width 6in
+  #+NAME:fig:create-sku
+  #+CAPTION:Create a SKU
+  [[file:img/Stripe-Payments-Dashboard-Stock-Keeping-Unit.png]]
+
+  After we created our products and assigned SKUs to them, we add them
+  to the webshop so we can parse up the order.
+
+  #+BEGIN_SRC js -n
+// Shop.js
+const skus = {
+  banana: 1,
+  cucumber: 2
+}
+  #+END_SRC
+
+  We are ready to send orders to our express API on submit. We do not
+  have to calculate the total price of orders from now on. Stripe can
+  sum it up for us, based on the SKUs, quantities, and coupons.
+
+  #+BEGIN_SRC js -n
+// Shop.js
+handleSubmit(evt) {
+  evt.preventDefault()
+  this.setState({fetching: true})
+  const state = this.state
+  const cart = state.cart
+
+  this.props.stripe.createToken({name: state.name}).then(({token}) => {
+    // Create order
+    const order = {
+      currency: 'usd',
+      items: Object.keys(cart).filter((name) => cart[name] > 0
+         ? true : false).map(name => {
+        return {
+          type: 'sku',
+          parent: skus[name],
+          quantity: cart[name]
+        }
+      }),
+      email: state.email,
+      shipping: {
+        name: state.name,
+        address: state.address
+      }
+    }
+    // Add coupon if given
+    if (state.coupon) {
+      order.coupon = state.coupon
+    }
+    // Send order
+    axios.post(`http://localhost:3001/api/shop/order`, {order, source: token.id})
+    .then(() => {
+      this.setState({fetching: false})
+      alert(`Thank you for your purchase!`)
+    })
+    .catch(error => {
+      this.setState({fetching: false})
+      console.log(error)
+    })
+  }).catch(error => {
+    this.setState({fetching: false})
+    console.log(error)
+  })
+}
+  #+END_SRC
+
+  Let's create a coupon for testing purposes. This can be done on the
+  dashboard as well. You can find this option under the *Billing* menu
+  on the *Coupons* tab.
+
+  There are multiple types of coupons based on their duration, but
+  only coupons with the type /Once/ can be used for orders. The rest of
+  the coupons can be attached to Stripe Customers.
+
+  You can also specify a lot of parameters for the coupon you create,
+  such as how many times it can be used, whether it is amount based or
+  percentage based, and when will the coupon expire. Now we need a
+  coupon that can be used only once and provides a reduction on the
+  price by a certain amount.
+
+  #+ATTR_HTML: :width 75%
+  #+ATTR_TEXINFO: :width 6in
+  #+NAME:fig:coupon
+  #+CAPTION:Dashboard Coupon Creation
+  [[file:img/Stripe-Payments-Dashboard-Coupon-Creation.png]]
+
+  Great! Now we have our products, we can create orders, and we can
+  also ask Stripe to charge the customer's card for us. But we are
+  still not ready to ship the products as we have no idea at the
+  moment whether the charge was successful. To get that information,
+  we need to set up /webhooks/, so Stripe can let us know when the money
+  is on its way.
+
+  #+ATTR_HTML: :width 75%
+  #+ATTR_TEXINFO: :width 6in
+  #+NAME:fig:orders
+  #+CAPTION:Stripe Payments Shop Orders
+  [[file:img/Stripe-Payments-Shop-Orders.png]]
+
+* Setting up Stripe Webhooks to Verify Payments
+
+  As we discussed earlier, we are not assigning cards but Sources to
+  Customers. The reason behind that is Stripe is capable of using
+  [[https://stripe.com/docs/sources][several payment methods]], some of which may take days to be verified.
+
+  We need to set up an endpoint Stripe can call when an event --- such
+  as a successful payment --- has happened. Webhooks are also useful
+  when an event is not initiated by us via calling the API, but comes
+  straight from Stripe.
+
+  Imagine that you have a subscription service, and you don't want to
+  charge the customer every month. In this case, you can set up a
+  webhook, and you will get notified when the recurring payment was
+  successful or if it failed.
+
+  In this example, we only want to be notified when an order gets
+  paid. When it happens, Stripe can notify us by calling an endpoint
+  on our API with an HTTP request containing the payment data in the
+  request body. At the moment, we don't have a static IP, but we need
+  a way to expose our local API to the public internet. We can use
+  [[https://ngrok.com/download][Ngrok]] for that. Just download it and run with ~./ngrok http 3001~
+  command to get an ngrok url pointing to our ~localhost:3001~.
+
+  We also have to set up our webhook on the Stripe dashboard. Go to
+  *Developers -> Webhooks*, click on =Add endpoint= and type in your
+  ngrok url followed by the endpoint to be called
+  e.g. =http://92832de0.ngrok.io/api/shop/order/process=. Then under
+  *Filter event* select =Select types to send= and search for
+  ~order.payment_succeeded~.
+
+  #+ATTR_HTML: :width 75%
+  #+ATTR_TEXINFO: :width 6in
+  #+NAME:fig:webhook
+  #+CAPTION:Stripe Dashboard Webhook Creation
+  [[file:img/Stripe-Dashboard-Webhook-Creation.png]]
+
+  The data sent in the request body is encrypted and can only be
+  decrypted by using a signature sent in the header and with the
+  webhook secret that can be found on the webhooks dashboard.
+
+  This also means that we cannot simply use ~bodyParser~ to parse the
+  body, so we need to add an exception to ~bodyParser~ so it will be
+  bypassed when the URL starts with =/api/shop/order/process=. We need
+  to use the ~stripe.webhooks.constructEvent()~ function instead,
+  provided by the Stripe SDK to decrypt the message for us.
+
+  #+BEGIN_SRC js -n
+// index.js
+const bodyParser = require('body-parser')
+
+app.use(bodyParser.json({
+  verify: (req, res, buf) => {
+    if (req.originalUrl.startsWith('/api/shop/order/process')) {
+      req.rawBody = buf.toString()
+    }
+  }
+}))
+
+app.use(bodyParser.urlencoded({
+  extended: false
+}))
+
+app.post('/api/shop/order/process', async (req, res) => {
+  const sig = req.headers['stripe-signature']
+  try {
+    const event = await
+       stripe.webhooks.
+       constructEvent(req.rawBody, sig, 'whsec_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+    console.log(`Processing Order : ${event.data.object.id}`)
+    // Process payed order here
+  } catch (err) {
+    return res.sendStatus(500)
+  }
+  return res.sendStatus(200)
+})
+  #+END_SRC
+
+  After an order was successfully paid, we can parse send it to other
+  APIs like Salesforce or Stamps to pack things up and get ready to
+  send out.
+
+* Wrapping It Up
+
+  My goal with this guide was to provide help to you through the
+  process of creating a Stripe-based webshop using JavaScript. I hope
+  you did learn from our experiences and will use this guide when you
+  decide to implement a similar system like this in the future.
+
+  In case you need help with Stripe-based webshops, or Node & React
+  development in general, feel free to reach out to us on
+  @@texinfo:@email{@@info@risingstack.com@@texinfo:}@@.
 
 * COPYING INFO
   :PROPERTIES:
@@ -239,11 +885,13 @@
   :INDEX:    cp
   :END:
 * MACRO SETUP                                                      :noexport:
-#+MACRO: VERSION Version 0.0.2
-#+MACRO: CREATE-DATE Created 2019-01-30 Wed 16:39
+#+MACRO: VERSION Version 0.0.3
+#+MACRO: CREATE-DATE Created 2019-01-31 Thu 19:20
 #+MACRO: file @@texinfo:@file{@@$1@@texinfo:}@@
+#+MACRO: heading @@texinfo:@heading @@$1
+#+MACRO: subheading @@texinfo:@subheading @@$1
 * TEXINFO EXPORT SETUP                                             :noexport:
-#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+OPTIONS: ':t *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
 #+OPTIONS: author:t broken-links:nil c:nil creator:nil
 #+OPTIONS: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t
 #+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
