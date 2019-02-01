@@ -21,7 +21,7 @@ Stripe Payments Integration 101 Roland Szőke January 29, 2019
 @finalout
 @titlepage
 @title Stripe Payments Integration 101
-@subtitle @emph{For JavaScript Developers} --- Version 0.1.2 Created 2019-02-01 Fri 09:34
+@subtitle @emph{For JavaScript Developers} --- Version 0.1.4 Created 2019-02-01 Fri 09:34
 @author Roland Szőke
 @page
 @vskip 0pt plus 1filll
@@ -245,8 +245,8 @@ section, where we will add our first @emph{webhook} and create our
 @emph{restricted API keys}. We will get more familiar with the
 dashboard and the API while we implement our demo shop below.
 
-@float Figure,orgd71dcb1
-@image{./img/stripe-payments-integration-dashboard-50,6in,,Stripe Dashboard,png}
+@float Figure,org6c6086a
+@image{img/stripe-payments-integration-dashboard-50,6in,,Stripe Dashboard,png}
 @caption{The Initial Stripe Dashboard View}
 @end float
 
@@ -311,7 +311,7 @@ the token you got from Stripe.
 @cindex Stripe Dashboard
 @cindex Dashboard, Stripe
 @cindex API key, Stripe Dashboard
-@float Figure,org025971f
+@float Figure,org06b9b9b
 @image{img/stripe-payments-dashboard-api-key-50,6in,,Stripe Dashboard API Key,png}
 @caption{Stripe Payments Dashboard API Key}
 @end float
@@ -336,7 +336,7 @@ the token you got from Stripe.
 @cindex @file{axios}
 @cindex @file{query-string-object}
 @pindex create-script
-@float Listing,org54f2835
+@float Listing,org061880f
 @example
 1  npx create-react-app webshop
 2  cd webshop
@@ -397,14 +397,14 @@ First, we have to add a @code{<StripeProvider/>} from
 This will give us access to the @uref{https://stripe.com/docs/stripe-js/reference#the-stripe-object, Stripe object}.  In the props, we
 should pass a @strong{public access key} (@code{apiKey}) which is found in the
 dashboard's @strong{Developers} section under the @emph{API keys} menu as
-@emph{Publishable key}. (@ref{org025971f})
+@emph{Publishable key}. (@ref{org06b9b9b})
 
 @pindex App.js
 @cindex @file{react-stripe-elements}
 @cindex @file{Elements}
 @cindex @file{StripeProvider}
 @cindex @code{apiKey}
-@float Listing,org9b55c79
+@float Listing,orgdc53676
 @example
  1  // App.js
  2  import React from 'react'
@@ -609,7 +609,7 @@ ready to charge it.
 @cindex @file{injectStripe}
 @cindex @file{react-stripe-elements}
 @cindex @code{injectStripe(Shop)} function
-@float Listing,orge682315
+@float Listing,orgf8b82a0
 @example
 1  // Shop.js
 2  import @{ injectStripe @} from 'react-stripe-elements'
@@ -636,12 +636,12 @@ Stripe API.
 We need to send the API key in the header for authorization. We
 can create a restricted API key on the dashboard in the
 @strong{Developers} menu. Set the permission for charges to ``Read and
-write'' as shown in @ref{orgf51d850}, below.
+write'' as shown in @ref{org2ac7407}, below.
 
 @strong{Do not forget:. You should never use your swiss army Secret key
 on the client!}
 
-@float Figure,orgf51d850
+@float Figure,org2ac7407
 @image{img/Stripe-Dashboard-API-Key-Restricted-50,6in,,,png}
 @caption{Restricted API Key in the Dashboard Developers Menu}
 @end float
@@ -756,7 +756,7 @@ for us.
 
 @pindex index.js
 @cindex server code, skeleton
-@float Listing,org47332a6
+@float Listing,org8f4cc4e
 @example
  1  // index.js
  2  const express = require('express')
@@ -859,7 +859,7 @@ let's not overcomplicate things.
 @cindex post, order
 @cindex create Stripe order
 @cindex order, create Stripe
-@float Listing,org085e75b
+@float Listing,orgd4638cf
 @example
  1  // index.js
  2  const stripe = require('stripe')('sk_test_xxxxxxxxxxxxxxxxxxxxxx')
@@ -1054,12 +1054,12 @@ group). An SKU specifies the products including its properties -
 size, color, quantity, and prices -, so a product can have
 multiple SKUs.
 
-@float Figure,orga313991
+@float Figure,org1bb42b3
 @image{img/stripe-payments-dashboard-banana-product-creation-50,6in,,,png}
 @caption{Create a Product}
 @end float
 
-@float Figure,orga26088f
+@float Figure,orgfb1e238
 @image{img/Stripe-Payments-Dashboard-Stock-Keeping-Unit-50,6in,,,png}
 @caption{Create a SKU}
 @end float
@@ -1170,7 +1170,7 @@ amount based or percentage based, and when will the coupon
 expire. Now we need a coupon that can be used only once and
 provides a reduction on the price by a certain amount.
 
-@float Figure,orgc1d5290
+@float Figure,org8b8cc79
 @image{img/Stripe-Payments-Dashboard-Coupon-Creation-50,6in,,,png}
 @caption{Dashboard Coupon Creation}
 @end float
@@ -1183,7 +1183,7 @@ moment whether the charge was successful. To get that information,
 we need to set up @emph{webhooks}, so Stripe can let us know when the
 money is on its way.
 
-@float Figure,org358e94c
+@float Figure,org4ddc1b1
 @image{img/Stripe-Payments-Shop-Orders-50,6in,,,png}
 @caption{Stripe Payments Shop Orders}
 @end float
@@ -1254,7 +1254,7 @@ e.g. @samp{http://92832de0.ngrok.io/api/shop/order/process}. Then under
 @strong{Filter event} select @samp{Select types to send} and search for
 @code{order.payment_succeeded}.
 
-@float Figure,orge0e0a14
+@float Figure,orge642346
 @image{img/Stripe-Dashboard-Webhook-Creation-50,6in,,,png}
 @caption{Stripe Dashboard Webhook Creation}
 @end float

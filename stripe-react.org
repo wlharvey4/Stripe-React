@@ -109,7 +109,7 @@ with Stripe Payments integration as a JavaScript developer.
     #+ATTR_TEXINFO: :alt Stripe Dashboard :width 6in
     #+NAME:fig:stripe-dashboard
     #+CAPTION: The Initial Stripe Dashboard View
-    [[file:./img/stripe-payments-integration-dashboard-50.png]]
+    [[file:img/stripe-payments-integration-dashboard-50.png]]
 
 * Creating a Webshop in React with Charges
 
@@ -1122,7 +1122,7 @@ app.post('/api/shop/order/process', async (req, res) => {
   I have taken that article and outlined and indexed it into a Texinfo
   source file using Emacs Orgmode, leaving most of the content
   unchanged.  I have provided an Info document, a PDF document, and an
-  HTML document for reference.
+  HTML document for reference in the alternate branch `compilations`.
 
   ## Create a Working Version
   The next step is to create a single source Orgmode document that
@@ -1159,8 +1159,8 @@ app.post('/api/shop/order/process', async (req, res) => {
   :INDEX:    pg
   :END:
 * MACRO SETUP                                                      :noexport:
-#+MACRO: VERSION Version 0.1.3
-#+MACRO: CREATE-DATE Created 2019-02-01 Fri 10:38
+#+MACRO: VERSION Version 0.1.4
+#+MACRO: CREATE-DATE Created 2019-02-01 Fri 09:34
 #+MACRO: file @@texinfo:@file{@@$1@@texinfo:}@@
 #+MACRO: heading @@texinfo:@heading @@$1
 #+MACRO: subheading @@texinfo:@subheading @@$1

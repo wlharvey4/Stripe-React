@@ -458,7 +458,7 @@ section, where we will add our first <em>webhook</em> and create our
 <em>restricted API keys</em>. We will get more familiar with the
 dashboard and the API while we implement our demo shop below.
 </p>
-<div class="float"><a name="orgb783b5a"></a>
+<div class="float"><a name="org6c6086a"></a>
 <img src="img/stripe-payments-integration-dashboard-50.png" alt="Stripe Dashboard">
 
 <div class="float-caption"><p><strong>Figure 2.1: </strong>The Initial Stripe Dashboard View</p></div></div>
@@ -534,7 +534,7 @@ the token you got from Stripe.
 <a name="index-Stripe-Dashboard"></a>
 <a name="index-Dashboard_002c-Stripe"></a>
 <a name="index-API-key_002c-Stripe-Dashboard"></a>
-<div class="float"><a name="orge88e8ec"></a>
+<div class="float"><a name="org06b9b9b"></a>
 <img src="img/stripe-payments-dashboard-api-key-50.png" alt="Stripe Dashboard API Key">
 
 <div class="float-caption"><p><strong>Figure 3.1: </strong>Stripe Payments Dashboard API Key</p></div></div>
@@ -572,7 +572,7 @@ Next: <a href="#Add-Stripejs-Code-to-indexhtml-File" accesskey="n" rel="next">Ad
 <a name="index-axios-1"></a>
 <a name="index-query_002dstring_002dobject-1"></a>
 <a name="index-create_002dscript"></a>
-<div class="float"><a name="orgee1e580"></a>
+<div class="float"><a name="org061880f"></a>
 <div class="example">
 <pre class="example">1  npx create-react-app webshop
 2  cd webshop
@@ -655,14 +655,14 @@ Next: <a href="#Implementation-of-Shopjs-Component" accesskey="n" rel="next">Imp
 <p>This will give us access to the <a href="https://stripe.com/docs/stripe-js/reference#the-stripe-object">Stripe object</a>.  In the props, we
 should pass a <strong>public access key</strong> (<code>apiKey</code>) which is found in the
 dashboard&rsquo;s <strong>Developers</strong> section under the <em>API keys</em> menu as
-<em>Publishable key</em>. (<a href="#orge88e8ec">Figure 3.1</a>)
+<em>Publishable key</em>. (<a href="#org06b9b9b">Figure 3.1</a>)
 </p>
 <a name="index-App_002ejs-1"></a>
 <a name="index-react_002dstripe_002delements"></a>
 <a name="index-Elements"></a>
 <a name="index-StripeProvider"></a>
 <a name="index-apiKey-1"></a>
-<div class="float"><a name="org4012e40"></a>
+<div class="float"><a name="orgdc53676"></a>
 <div class="example">
 <pre class="example"> 1  // App.js
  2  import React from 'react'
@@ -882,7 +882,7 @@ ready to charge it.
 <a name="index-injectStripe-1"></a>
 <a name="index-react_002dstripe_002delements-2"></a>
 <a name="index-injectStripe_0028Shop_0029-function"></a>
-<div class="float"><a name="orgd241acf"></a>
+<div class="float"><a name="orgf8b82a0"></a>
 <div class="example">
 <pre class="example">1  // Shop.js
 2  import { injectStripe } from 'react-stripe-elements'
@@ -914,12 +914,12 @@ Stripe API.
 <p>We need to send the API key in the header for authorization. We
 can create a restricted API key on the dashboard in the
 <strong>Developers</strong> menu. Set the permission for charges to &ldquo;Read and
-write&rdquo; as shown in <a href="#orgbde6be2">Figure 3.2</a>, below.
+write&rdquo; as shown in <a href="#org2ac7407">Figure 3.2</a>, below.
 </p>
 <p><strong>Do not forget:. You should never use your swiss army Secret key
 on the client!</strong>
 </p>
-<div class="float"><a name="orgbde6be2"></a>
+<div class="float"><a name="org2ac7407"></a>
 <img src="img/Stripe-Dashboard-API-Key-Restricted-50.png" alt="img/Stripe-Dashboard-API-Key-Restricted-50">
 
 <div class="float-caption"><p><strong>Figure 3.2: </strong>Restricted API Key in the Dashboard Developers Menu</p></div></div>
@@ -1053,7 +1053,7 @@ for us.
 </p>
 <a name="index-index_002ejs-1"></a>
 <a name="index-server-code_002c-skeleton"></a>
-<div class="float"><a name="org73ef120"></a>
+<div class="float"><a name="org8f4cc4e"></a>
 <div class="example">
 <pre class="example"> 1  // index.js
  2  const express = require('express')
@@ -1183,7 +1183,7 @@ Previous: <a href="#Use-Card-Token-as-Source" accesskey="p" rel="prev">Use Card 
 <a name="index-post_002c-order"></a>
 <a name="index-create-Stripe-order"></a>
 <a name="index-order_002c-create-Stripe"></a>
-<div class="float"><a name="org20cbfa1"></a>
+<div class="float"><a name="orgd4638cf"></a>
 <div class="example">
 <pre class="example"> 1  // index.js
  2  const stripe = require('stripe')('sk_test_xxxxxxxxxxxxxxxxxxxxxx')
@@ -1407,11 +1407,11 @@ group). An SKU specifies the products including its properties -
 size, color, quantity, and prices -, so a product can have
 multiple SKUs.
 </p>
-<div class="float"><a name="orgeb9e807"></a>
+<div class="float"><a name="org1bb42b3"></a>
 <img src="img/stripe-payments-dashboard-banana-product-creation-50.png" alt="img/stripe-payments-dashboard-banana-product-creation-50">
 
 <div class="float-caption"><p><strong>Figure 4.1: </strong>Create a Product</p></div></div>
-<div class="float"><a name="orga4891ec"></a>
+<div class="float"><a name="orgfb1e238"></a>
 <img src="img/Stripe-Payments-Dashboard-Stock-Keeping-Unit-50.png" alt="img/Stripe-Payments-Dashboard-Stock-Keeping-Unit-50">
 
 <div class="float-caption"><p><strong>Figure 4.2: </strong>Create a SKU</p></div></div>
@@ -1539,7 +1539,7 @@ amount based or percentage based, and when will the coupon
 expire. Now we need a coupon that can be used only once and
 provides a reduction on the price by a certain amount.
 </p>
-<div class="float"><a name="org03ea0dd"></a>
+<div class="float"><a name="org8b8cc79"></a>
 <img src="img/Stripe-Payments-Dashboard-Coupon-Creation-50.png" alt="img/Stripe-Payments-Dashboard-Coupon-Creation-50">
 
 <div class="float-caption"><p><strong>Figure 4.3: </strong>Dashboard Coupon Creation</p></div></div>
@@ -1551,7 +1551,7 @@ moment whether the charge was successful. To get that information,
 we need to set up <em>webhooks</em>, so Stripe can let us know when the
 money is on its way.
 </p>
-<div class="float"><a name="orgc8377e8"></a>
+<div class="float"><a name="org4ddc1b1"></a>
 <img src="img/Stripe-Payments-Shop-Orders-50.png" alt="img/Stripe-Payments-Shop-Orders-50">
 
 <div class="float-caption"><p><strong>Figure 4.4: </strong>Stripe Payments Shop Orders</p></div></div>
@@ -1642,7 +1642,7 @@ e.g. &lsquo;<samp>http://92832de0.ngrok.io/api/shop/order/process</samp>&rsquo;.
 <strong>Filter event</strong> select &lsquo;<samp>Select types to send</samp>&rsquo; and search for
 <code>order.payment_succeeded</code>.
 </p>
-<div class="float"><a name="orgdfea5ab"></a>
+<div class="float"><a name="orge642346"></a>
 <img src="img/Stripe-Dashboard-Webhook-Creation-50.png" alt="img/Stripe-Dashboard-Webhook-Creation-50">
 
 <div class="float-caption"><p><strong>Figure 5.1: </strong>Stripe Dashboard Webhook Creation</p></div></div>
@@ -1741,14 +1741,14 @@ Next: <a href="#LIST-OF-CODE-FRAGMENTS" accesskey="n" rel="next">LIST OF CODE FR
 <h2 class="unnumbered">LIST OF FIGURES</h2>
 
 <dl class="listoffloats">
-<dt><a href="#orgb783b5a">Figure 2.1</a></dt><dd><p>The Initial Stripe Dashboard View</p></dd>
-<dt><a href="#orge88e8ec">Figure 3.1</a></dt><dd><p>Stripe Payments Dashboard API Key</p></dd>
-<dt><a href="#orgbde6be2">Figure 3.2</a></dt><dd><p>Restricted API Key in the Dashboard Developers Menu</p></dd>
-<dt><a href="#orgeb9e807">Figure 4.1</a></dt><dd><p>Create a Product</p></dd>
-<dt><a href="#orga4891ec">Figure 4.2</a></dt><dd><p>Create a SKU</p></dd>
-<dt><a href="#org03ea0dd">Figure 4.3</a></dt><dd><p>Dashboard Coupon Creation</p></dd>
-<dt><a href="#orgc8377e8">Figure 4.4</a></dt><dd><p>Stripe Payments Shop Orders</p></dd>
-<dt><a href="#orgdfea5ab">Figure 5.1</a></dt><dd><p>Stripe Dashboard Webhook Creation</p></dd>
+<dt><a href="#org6c6086a">Figure 2.1</a></dt><dd><p>The Initial Stripe Dashboard View</p></dd>
+<dt><a href="#org06b9b9b">Figure 3.1</a></dt><dd><p>Stripe Payments Dashboard API Key</p></dd>
+<dt><a href="#org2ac7407">Figure 3.2</a></dt><dd><p>Restricted API Key in the Dashboard Developers Menu</p></dd>
+<dt><a href="#org1bb42b3">Figure 4.1</a></dt><dd><p>Create a Product</p></dd>
+<dt><a href="#orgfb1e238">Figure 4.2</a></dt><dd><p>Create a SKU</p></dd>
+<dt><a href="#org8b8cc79">Figure 4.3</a></dt><dd><p>Dashboard Coupon Creation</p></dd>
+<dt><a href="#org4ddc1b1">Figure 4.4</a></dt><dd><p>Stripe Payments Shop Orders</p></dd>
+<dt><a href="#orge642346">Figure 5.1</a></dt><dd><p>Stripe Dashboard Webhook Creation</p></dd>
 </dl>
 
 <hr>
@@ -1761,11 +1761,11 @@ Next: <a href="#CONCEPT-INDEX" accesskey="n" rel="next">CONCEPT INDEX</a>, Previ
 <h2 class="unnumbered">LIST OF CODE FRAGMENTS</h2>
 
 <dl class="listoffloats">
-<dt><a href="#orgee1e580">Listing 3.1</a></dt><dd><p>Create the Webshop Front End</p></dd>
-<dt><a href="#org4012e40">Listing 3.2</a></dt><dd><p><code>StripeProvider</code> Component in Root Component</p></dd>
-<dt><a href="#orgd241acf">Listing 3.3</a></dt><dd><p>Inject Stripe from react-stripe-elements</p></dd>
-<dt><a href="#org73ef120">Listing 4.1</a></dt><dd><p>Initial Framework for Server <code>index.js</code></p></dd>
-<dt><a href="#org20cbfa1">Listing 4.2</a></dt><dd><p>App Post Function</p></dd>
+<dt><a href="#org061880f">Listing 3.1</a></dt><dd><p>Create the Webshop Front End</p></dd>
+<dt><a href="#orgdc53676">Listing 3.2</a></dt><dd><p><code>StripeProvider</code> Component in Root Component</p></dd>
+<dt><a href="#orgf8b82a0">Listing 3.3</a></dt><dd><p>Inject Stripe from react-stripe-elements</p></dd>
+<dt><a href="#org8f4cc4e">Listing 4.1</a></dt><dd><p>Initial Framework for Server <code>index.js</code></p></dd>
+<dt><a href="#orgd4638cf">Listing 4.2</a></dt><dd><p>App Post Function</p></dd>
 </dl>
 
 <hr>
