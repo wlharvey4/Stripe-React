@@ -31,12 +31,15 @@ with Stripe Payments integration as a JavaScript developer.
    #+CINDEX:project
    #+CINDEX:frontend, github
    #+CINDEX:backend, github
+   #+CINDEX:github sources
+   #+CINDEX:Stripe Webshop, create
    We'll build an example app in this tutorial together---so you can
    learn how to create a Stripe Webshop from the ground up! The
    example app's frontend can be found at
    https://github.com/RisingStack/post-stripe , and its backend at
    https://github.com/RisingStack/post-stripe-api.
 
+   #+CINDEX:code samples, github
    I’ll use code samples from these repo’s in the article below.
 
 * The Basics of Stripe Payments Integration
@@ -72,6 +75,10 @@ with Stripe Payments integration as a JavaScript developer.
 
 *** Create a New Coupon or Product
 
+    #+CINDEX:coupon, create new
+    #+CINDEX:product, create new
+    #+CINDEX:create new coupon or product
+    #+CINDEX:Stripe API documentation, link to
     If you want to create a new coupon or product, you only need to
     click a few buttons or enter a simple curl command to your
     terminal, as the [[https://stripe.com/docs/api][Stripe API Doc]] describes.
@@ -79,19 +86,20 @@ with Stripe Payments integration as a JavaScript developer.
 *** Integrate Stripe Into a Product
 
     #+CINDEX:Stripe product integration
-    #+CINDEX:integrate Stripe
-    #+CINDEX:@file{Stripe.js}
+    #+CINDEX:integrate Stripe into product
+    #+CINDEX:@file{Stripe.js} link
     Of course, you can integrate Stripe into your product so your
     admins can set them up from your UI, and then integrate and expose
     it to your customers using [[https://github.com/stripe/stripe-node][Stripe.js]].
 
 *** Stripe Developers Section
 
-    #+CINDEX:Developers section
-    #+CINDEX:dashboard
+    #+CINDEX:Developers section, Dashboard
+    #+CINDEX:dashboard, Developers section
     #+CINDEX:webhook
     #+CINDEX:API
     #+CINDEX:api keys
+    #+CINDEX:restricted api keys
     Another important menu on the dashboard is the *Developers*
     section, where we will add our first /webhook/ and create our
     /restricted API keys/. We will get more familiar with the
@@ -106,7 +114,9 @@ with Stripe Payments integration as a JavaScript developer.
 * Creating a Webshop in React with Charges
 
   #+CINDEX:webshop creation
-  #+CINDEX:React app
+  #+CINDEX:React app, Webshop
+  #+CINDEX:webshop products
+  #+CINDEX:products in webshop
   Let’s create a React Webshop with two products: a Banana and
   Cucumber. What else would you want to buy in a webshop anyways,
   right?
@@ -135,11 +145,13 @@ with Stripe Payments integration as a JavaScript developer.
 
   #+CINDEX:credit card details, raw
   #+CINDEX:credit card security
+  #+CINDEX:WARNING, raw credit card details
   *WARNING:* You should never send raw credit card details to your
   own API, but let Stripe handle the credit card security for you.
 
   #+CINDEX: token, from Stripe
   #+CINDEX:credit card identification
+  #+CINDEX:identify credit card, how
   You will be able to identify the card provided by the user using
   the token you got from Stripe.
 
@@ -158,7 +170,7 @@ with Stripe Payments integration as a JavaScript developer.
 
    #+CINDEX:@file{webshop}
    #+CINDEX:front end
-   #+CINDEX:React
+   #+CINDEX:React app, setup
    #+CINDEX:@command{create-react-app}
    #+CINDEX:@command{npx}
    #+CINDEX:@command{npm install}
@@ -1095,6 +1107,28 @@ app.post('/api/shop/order/process', async (req, res) => {
   development in general, feel free to reach out to us on
   @@texinfo:@email{@@info@risingstack.com@@texinfo:}@@.
 
+* README                                                           :noexport:
+
+  #+BEGIN_SRC markdown :tangle README.md
+  # Stripe Payment Integration in a React App
+  Author Roland Szőke wrote a beginner's tutorial for integrating
+  Stripe credit card payments into a React application on January 29,
+  2019 in a
+  [RisingStack](https://blog.risingstack.com/stripe-payments-integration-tutorial-javascript/)
+  blog post.
+
+  ## Outlined and Indexing
+
+  I have taken that article and outlined and indexed it into a Texinfo
+  source file using Emacs Orgmode, leaving most of the content
+  unchanged.  I have provided an Info document, a PDF document, and an
+  HTML document for reference.
+
+  ## Create a Working Version
+  The next step is to create a single source Orgmode document that
+  will reproduce the project and publish it to a working prototype.
+  #+END_SRC
+
 * COPYING INFO
   :PROPERTIES:
   :COPYING:
@@ -1125,8 +1159,8 @@ app.post('/api/shop/order/process', async (req, res) => {
   :INDEX:    pg
   :END:
 * MACRO SETUP                                                      :noexport:
-#+MACRO: VERSION Version 0.1.0
-#+MACRO: CREATE-DATE Created 2019-02-01 Fri 09:04
+#+MACRO: VERSION Version 0.1.2
+#+MACRO: CREATE-DATE Created 2019-02-01 Fri 09:34
 #+MACRO: file @@texinfo:@file{@@$1@@texinfo:}@@
 #+MACRO: heading @@texinfo:@heading @@$1
 #+MACRO: subheading @@texinfo:@subheading @@$1

@@ -1,0 +1,1355 @@
+\input texinfo    @c -*- texinfo -*-
+@c %**start of header
+@setfilename stripe-react.info
+@settitle Stripe Payments Integration 101
+@documentencoding UTF-8
+@documentlanguage en
+@c %**end of header
+
+@copying
+@display
+Stripe Payments Integration 101 Roland Szőke January 29, 2019
+@copyright{} 2019
+@end display
+@end copying
+
+@dircategory WebDev
+@direntry
+* Stripe Integration 101. How to create a webshop using Stripe.
+@end direntry
+
+@finalout
+@titlepage
+@title Stripe Payments Integration 101
+@subtitle @emph{For JavaScript Developers} --- Version 0.1.2 Created 2019-02-01 Fri 09:34
+@author Roland Szőke
+@page
+@vskip 0pt plus 1filll
+@insertcopying
+@end titlepage
+
+@contents
+
+@ifnottex
+@node Top
+@top Stripe Payments Integration 101
+
+Sample app, detailed guidance & best practices to help you get started
+with Stripe Payments integration as a JavaScript developer.
+@end ifnottex
+
+@menu
+* Introduction::
+* The Basics of Stripe Payments Integration::
+* Creating a Webshop in React with Charges::
+* Placing an Order With Stripe::
+* Setting up Stripe Webhooks to Verify Payments::
+* Wrapping It Up::
+* LIST OF FIGURES::
+* LIST OF CODE FRAGMENTS::
+* CONCEPT INDEX::
+* SOURCE INDEX::
+
+@detailmenu
+--- The Detailed Node Listing ---
+
+Introduction
+
+* About The Author::
+* About the Project::
+
+The Basics of Stripe Payments Integration
+
+* Stripe Setup and Dashboard::
+
+Stripe Setup and Dashboard
+
+* Signup To Stripe::
+* Create a New Coupon or Product::
+* Integrate Stripe Into a Product::
+* Stripe Developers Section::
+
+Creating a Webshop in React with Charges
+
+* Steps for Creating a Webshop::
+* Terminal Commands To Build the React App::
+* Coding the App::
+
+Terminal Commands To Build the React App
+
+* Create the React App and Install Stripe Elements and Axios::
+* Add @code{Stripe.js} Code to @code{index.html} File: Add @code{Stripejs} Code to @code{indexhtml} File. 
+
+Coding the App
+
+* Stripe Object in Root React Component @file{App.js}: Stripe Object in Root React Component @file{Appjs}. 
+* Implementation of @file{Shop.js} Component: Implementation of @file{Shopjs} Component. 
+* Explanation of @file{Shop.js}: Explanation of @file{Shopjs}. 
+* POST Request to Stripe::
+* Charge a Credit Card in @file{Shop.js}: Charge a Credit Card in @file{Shopjs}. 
+
+Placing an Order With Stripe
+
+* Set Up an Express Server::
+* Handle Orders on the Front End::
+
+Set Up an Express Server
+
+* Access Stripe in Server @code{index.js}: Access Stripe in Server @code{indexjs}. 
+* Stripe Customers::
+* Use Card Token as @samp{Source}::
+* Implement CC Charges in @code{index.js}: Implement CC Charges in @code{indexjs}. 
+
+Handle Orders on the Front End
+
+* Implement State of Shop Component::
+* Create Input Fields::
+* Create Products and Assign SKUs::
+* Add Products to the Webshop::
+* Send Orders to Stripe API on Submit::
+* Create a Coupon for Testing::
+
+Setting up Stripe Webhooks to Verify Payments
+
+* Webhook Notification When Order Gets Paid::
+
+Webhook Notification When Order Gets Paid
+
+* Webhook Setup using Stripe Dashboard::
+* Decrypting Request Body Sent by Stripe::
+
+@end detailmenu
+@end menu
+
+@node Introduction
+@chapter Introduction
+
+In this article, I’ll show how you can create a simple webshop using
+Stripe Payments integration, React and Express. We'll get familiar
+with the Stripe Dashboard and basic Stripe features such as charges,
+customers, orders, coupons and so on. Also, you will learn about the
+usage of webhooks and restricted API keys.
+
+@menu
+* About The Author::
+* About the Project::
+@end menu
+
+@node About The Author
+@section About The Author
+
+@cindex author, about
+A little bit about my Stripe experience and the reasons for writing
+this tutorial: At @uref{https://risingstack.com/, RisingStack} we’ve been working with a client from
+the US healthcare scene who hired us to create a large-scale
+webshop they can use to sell their products. During the creation of
+this Stripe based platform, we spent a lot of time with studying
+the documentation and figuring out the integration. Not because it
+is hard, but there's a certain amount of Stripe related knowledge
+that you'll need to internalize.
+
+@node About the Project
+@section About the Project
+
+@cindex project
+@cindex frontend, github
+@cindex backend, github
+@cindex github sources
+@cindex Stripe Webshop, create
+We'll build an example app in this tutorial together---so you can
+learn how to create a Stripe Webshop from the ground up! The
+example app's frontend can be found at
+@uref{https://github.com/RisingStack/post-stripe} , and its backend at
+@uref{https://github.com/RisingStack/post-stripe-api}.
+
+@cindex code samples, github
+I’ll use code samples from these repo’s in the article below.
+
+@node The Basics of Stripe Payments Integration
+@chapter The Basics of Stripe Payments Integration
+
+@cindex Stripe, what it is
+First of all, what is the promise of Stripe? It is basically a
+payment provider: you set up your account, integrate it into your
+application and let the money rain. Pretty simple right? Well, let
+your finance people decide if it is a good provider or not based on
+the plans they offer.
+
+To show you how to use Stripe, we’ll build a simple demo application
+with it together.
+
+@menu
+* Stripe Setup and Dashboard::
+@end menu
+
+@node Stripe Setup and Dashboard
+@section Stripe Setup and Dashboard
+
+@cindex Stripe account, setup
+Before we start coding, we need to create a Stripe account. Don't
+worry, no credit card is required in this stage. You only need to
+provide a payment method when you attempt to activate your account.
+
+@menu
+* Signup To Stripe::
+* Create a New Coupon or Product::
+* Integrate Stripe Into a Product::
+* Stripe Developers Section::
+@end menu
+
+@node Signup To Stripe
+@subsection Signup To Stripe
+
+@cindex Stripe dashboard
+@cindex dashboard
+@cindex Stripe signup
+@cindex signup
+Go straight to the @uref{https://dashboard.stripe.com/login, Stripe Dashboard} and hit that @strong{Sign up}
+button. Email, name, password@dots{} the usual. BOOM! You have a
+dashboard. You can create, manage and keep track of orders,
+payment flow, customers@dots{} so basically everything you want to
+know regarding your shop is here.
+
+@node Create a New Coupon or Product
+@subsection Create a New Coupon or Product
+
+@cindex coupon, create new
+@cindex product, create new
+@cindex create new coupon or product
+@cindex Stripe API documentation, link to
+If you want to create a new coupon or product, you only need to
+click a few buttons or enter a simple curl command to your
+terminal, as the @uref{https://stripe.com/docs/api, Stripe API Doc} describes.
+
+@node Integrate Stripe Into a Product
+@subsection Integrate Stripe Into a Product
+
+@cindex Stripe product integration
+@cindex integrate Stripe into product
+@cindex @file{Stripe.js} link
+Of course, you can integrate Stripe into your product so your
+admins can set them up from your UI, and then integrate and expose
+it to your customers using @uref{https://github.com/stripe/stripe-node, Stripe.js}.
+
+@node Stripe Developers Section
+@subsection Stripe Developers Section
+
+@cindex Developers section, Dashboard
+@cindex dashboard, Developers section
+@cindex webhook
+@cindex API
+@cindex api keys
+@cindex restricted api keys
+Another important menu on the dashboard is the @strong{Developers}
+section, where we will add our first @emph{webhook} and create our
+@emph{restricted API keys}. We will get more familiar with the
+dashboard and the API while we implement our demo shop below.
+
+@float Figure,org4165562
+@image{img/stripe-payments-integration-dashboard,6in,,Stripe Dashboard,png}
+@caption{The Initial Stripe Dashboard View}
+@end float
+
+@node Creating a Webshop in React with Charges
+@chapter Creating a Webshop in React with Charges
+
+@cindex webshop creation
+@cindex React app, Webshop
+@cindex webshop products
+@cindex products in webshop
+Let’s create a React Webshop with two products: a Banana and
+Cucumber. What else would you want to buy in a webshop anyways,
+right?
+
+@menu
+* Steps for Creating a Webshop::
+* Terminal Commands To Build the React App::
+* Coding the App::
+@end menu
+
+@node Steps for Creating a Webshop
+@section Steps for Creating a Webshop
+
+@cindex create-react-app
+@cindex axios
+@cindex query-string-object
+@cindex convert objects to query strings
+@cindex Stripe requests
+@cindex React Stripe Elements
+@cindex @file{Stripe.js}
+@cindex Stripe Elements
+@cindex credit card, secure inputs
+@cindex tokenization, credit card data
+@itemize
+@item
+We can use @uref{https://github.com/facebook/create-react-app, Create React App} to get started.
+@item
+We're going to use @uref{https://github.com/axios/axios, Axios} for HTTP requests;
+@item
+and @uref{https://www.npmjs.com/package/query-string-object, query-string-object} to convert objects to query strings for
+Stripe requests.
+@item
+We will also need @uref{https://github.com/stripe/react-stripe-elements, React Stripe Elements}, which is a React wrapper
+for Stripe.js and Stripe Elements. It adds secure credit card
+inputs and sends the card's data for tokenization to the Stripe
+API.
+@end itemize
+
+
+@cindex credit card details, raw
+@cindex credit card security
+@cindex WARNING, raw credit card details
+@strong{WARNING:} You should never send raw credit card details to your
+own API, but let Stripe handle the credit card security for you.
+
+@cindex token, from Stripe
+@cindex credit card identification
+@cindex identify credit card, how
+You will be able to identify the card provided by the user using
+the token you got from Stripe.
+
+@cindex Stripe Dashboard
+@cindex Dashboard, Stripe
+@cindex API key, Stripe Dashboard
+@float Figure,orgd2f83af
+@image{img/stripe-payments-dashboard-api-key,6in,,Stripe Dashboard API Key,png}
+@caption{Stripe Payments Dashboard API Key}
+@end float
+
+@node Terminal Commands To Build the React App
+@section Terminal Commands To Build the React App
+
+@menu
+* Create the React App and Install Stripe Elements and Axios::
+* Add @code{Stripe.js} Code to @code{index.html} File: Add @code{Stripejs} Code to @code{indexhtml} File. 
+@end menu
+
+@node Create the React App and Install Stripe Elements and Axios
+@subsection Create the React App and Install Stripe Elements and Axios
+
+@cindex @file{webshop}
+@cindex front end
+@cindex React app, setup
+@cindex @command{create-react-app}
+@cindex @command{npx}
+@cindex @command{npm install}
+@cindex @file{axios}
+@cindex @file{query-string-object}
+@pindex create-script
+@float Listing,org27f8ff3
+@example
+1  npx create-react-app webshop
+2  cd webshop
+3  npm install --save react-stripe-elements
+4  npm install --save axios
+5  npm install --save query-string-object
+@end example
+@caption{Create the Webshop Front End}
+@end float
+
+@node Add @code{Stripejs} Code to @code{indexhtml} File
+@subsection Add @code{Stripe.js} Code to @code{index.html} File
+
+@cindex @file{Stripe.js}
+@cindex @file{index.html}
+@cindex @samp{<script>...</script>}
+After we’re done with the preparations, we have to include
+@file{Stripe.js} in our application.  Just add
+@example
+<script src="https://js.stripe.com/v3/"></script>
+@end example
+@noindent to the head of your @file{index.html}.
+
+@node Coding the App
+@section Coding the App
+
+@menu
+* Stripe Object in Root React Component @file{App.js}: Stripe Object in Root React Component @file{Appjs}. 
+* Implementation of @file{Shop.js} Component: Implementation of @file{Shopjs} Component. 
+* Explanation of @file{Shop.js}: Explanation of @file{Shopjs}. 
+* POST Request to Stripe::
+* Charge a Credit Card in @file{Shop.js}: Charge a Credit Card in @file{Shopjs}. 
+@end menu
+
+@node Stripe Object in Root React Component @file{Appjs}
+@subsection Stripe Object in Root React Component @file{App.js}
+
+@cindex StripeProvider component
+@cindex ~react-stripe-elements~
+@cindex root react component
+@cindex react root component
+@cindex @file{App.js}
+First, we have to add a @code{<StripeProvider/>} from
+@code{react-stripe-elements} to our root React App component.
+
+@cindex Stripe object
+@cindex props
+@cindex react props
+@cindex public access key
+@cindex access key, public
+@cindex key, public access
+@cindex @code{apiKey}
+@cindex Dashboard
+@cindex Developers section, Dashboard
+@cindex API keys
+@cindex Dashboard menu
+@cindex Publishable key
+This will give us access to the @uref{https://stripe.com/docs/stripe-js/reference#the-stripe-object, Stripe object}.  In the props, we
+should pass a @strong{public access key} (@code{apiKey}) which is found in the
+dashboard's @strong{Developers} section under the @emph{API keys} menu as
+@emph{Publishable key}. (@ref{orgd2f83af})
+
+@pindex App.js
+@cindex @file{react-stripe-elements}
+@cindex @file{Elements}
+@cindex @file{StripeProvider}
+@cindex @code{apiKey}
+@float Listing,orgf6639a9
+@example
+ 1  // App.js
+ 2  import React from 'react'
+ 3  import @{StripeProvider, Elements@} from 'react-stripe-elements'
+ 4  import Shop from './Shop'
+ 5  
+ 6  const App = () => @{
+ 7    return (
+ 8      <StripeProvider apiKey="pk_test_xxxxxxxxxxxxxxxxxxxxxxxx">
+ 9        <Elements>
+10          <Shop/>
+11        </Elements>
+12      </StripeProvider>
+13    )
+14  @}
+@end example
+@caption{@code{StripeProvider} Component in Root Component}
+@end float
+
+The @code{<Shop/>} is the implementation of our shop form as you can see
+from @code{import Shop from './Shop'}.  We'll go into the details later.
+
+@node Implementation of @file{Shopjs} Component
+@subsection Implementation of @file{Shop.js} Component
+
+@cindex @file{Elements}
+@cindex @code{injectStripe}
+@cindex @file{Shop.js}
+As you can see the @code{<Shop/>} is wrapped in @code{<Elements>} imported
+from @file{react-stripe-elements} so that you can use
+@code{injectStripe} in your components. To shed some light on this,
+let's take a look at our implementation in @file{Shop.js}.
+
+@pindex Shop.js
+@example
+  1   // Shop.js
+  2  import React, @{ Component @} from 'react'
+  3  import @{ CardElement @} from 'react-stripe-elements'
+  4  import PropTypes from 'prop-types'
+  5  import axios from 'axios'
+  6  import qs from 'query-string-object'
+  7  
+  8  const prices = @{
+  9    banana: 150,
+ 10    cucumber: 100
+ 11  @}
+ 12  
+ 13  class Shop extends Component @{
+ 14    constructor(props) @{
+ 15      super(props)
+ 16      this.state = @{
+ 17        fetching: false,
+ 18        cart: @{
+ 19          banana: 0,
+ 20          cucumber: 0
+ 21        @}
+ 22      @}
+ 23      this.handleCartChange = this.handleCartChange.bind(this)
+ 24      this.handleCartReset = this.handleCartReset.bind(this)
+ 25      this.handleSubmit = this.handleSubmit.bind(this)
+ 26    @}
+ 27  
+ 28    handleCartChange(evt) @{
+ 29      evt.preventDefault()
+ 30      const cart = this.state.cart
+ 31      cart[evt.target.name]+= parseInt(evt.target.value)
+ 32      this.setState(@{cart@})
+ 33    @}
+ 34  
+ 35    handleCartReset(evt) @{
+ 36      evt.preventDefault()
+ 37      this.setState(@{cart:@{banana: 0, cucumber: 0@}@})
+ 38    @}
+ 39  
+ 40    handleSubmit(evt) @{
+ 41      // TODO
+ 42    @}
+ 43  
+ 44    render () @{
+ 45      const cart = this.state.cart
+ 46      const fetching = this.state.fetching
+ 47      return (
+ 48        <form onSubmit=@{this.handleSubmit@}
+ 49              style=@{@{width: '550px', margin: '20px',
+ 50                      padding: '10px', border: '2px solid lightseagreen',
+ 51                      borderRadius: '10px'@}@}>
+ 52          <div>
+ 53            Banana @{(prices.banana / 100).toLocaleString('en-US',
+ 54                   @{style: 'currency', currency: 'usd'@})@}:
+ 55            <div>
+ 56              <button name="banana" value=@{1@}
+ 57                 onClick=@{this.handleCartChange@}>
+ 58                 +
+ 59              </button>
+ 60              <button name="banana" value=@{-1@}
+ 61                 onClick=@{this.handleCartChange@}
+ 62                 disabled=@{cart.banana <= 0@}>
+ 63                 -
+ 64              </button>
+ 65              @{cart.banana@}
+ 66            </div>
+ 67          </div>
+ 68          <div>
+ 69            Cucumber @{(prices.cucumber / 100).toLocaleString('en-US',
+ 70                     @{style: 'currency', currency: 'usd'@})@}:
+ 71            <div>
+ 72              <button name="cucumber" value=@{1@}
+ 73                 onClick=@{this.handleCartChange@}>
+ 74                 +
+ 75              </button>
+ 76              <button name="cucumber" value=@{-1@}
+ 77                 onClick=@{this.handleCartChange@} disabled=@{cart.cucumber <= 0@}>
+ 78                 -
+ 79              </button>
+ 80              @{cart.cucumber@}
+ 81            </div>
+ 82          </div>
+ 83          <button onClick=@{this.handleCartReset@}> Reset Cart </button>
+ 84          <div style=@{@{width: '450px', margin: '10px',
+ 85                       padding: '5px', border: '2px solid green',
+ 86                       borderRadius: '10px'@}@}>
+ 87             <CardElement style=@{@{base: @{fontSize: '18px'@}@}@}/>
+ 88          </div>
+ 89          @{!fetching
+ 90            ? <button type="submit"
+ 91               disabled=@{cart.banana === 0 &&
+ 92               cart.cucumber === 0@}>Purchase</button>
+ 93            : 'Purchasing...'
+ 94          @}
+ 95          Price:
+ 96            @{((cart.banana * prices.banana + cart.cucumber * prices.cucumber) / 100)
+ 97                 .toLocaleString('en-US',
+ 98                @{style: 'currency', currency: 'usd'@})@}
+ 99        </form>
+100      )
+101    @}
+102  @}
+103  
+104  Shop.propTypes = @{
+105    stripe: PropTypes.shape(@{
+106      createToken: PropTypes.func.isRequired
+107    @}).isRequired
+108  @}
+@end example
+
+@node Explanation of @file{Shopjs}
+@subsection Explanation of @file{Shop.js}
+
+@heading Simple React Form
+
+@cindex React form
+@cindex form, React
+The @code{Shop} is a simple React form with purchasable elements:
+@samp{Banana} and @samp{Cucumber}, and with a quantity @samp{increase/decrease}
+button for each. Clicking the buttons will change their respective
+amount in @code{this.state.cart}.
+
+@subheading Presentation
+
+There is a @samp{submit} button below, and the current total price of
+the cart is printed at the very bottom of the form.  Price will
+expect the prices in cents, so we store them as cents, but of
+course, we want to present them to the user in dollars.  We prefer
+them to be shown to the second decimal place, e.g. $2.50 instead
+of $2.5. To achieve this, we can use the built-in
+@code{toLocaleString()} function to format the prices.
+
+@heading Stripe Form for Card Details: @code{<CardElement/>}
+
+@cindex Stripe, in React form
+@cindex Stripe form element
+@cindex credit card, details
+@cindex @file{CardElement}
+@cindex @file{react-stripe-elements}
+@cindex css, form style
+Now comes the Stripe-specific part: we need to add a form element
+so users can enter their card details. To achieve this, we only
+need to add @code{<CardElement/>} from
+@file{react-stripe-elements} and that's it. I've also added a
+bit of low effort inline @samp{css} to make this shop at least somewhat
+pleasing to the eye.
+
+@heading Pass Sripe Object As Prop to the @code{Shop}
+
+@cindex @file{injectStripe} hoc
+@cindex higher-order-component, @file{injectStripe}
+@cindex Stripe object, as prop
+@cindex Shop component
+@cindex @code{createToken()} function
+@cindex @code{handleSubmit}
+@cindex credit card, tokenized
+@cindex tokenize, credit card
+@cindex credit card, charge
+We also need to use the @code{injectStripe} Higher-Order-Component in
+order to pass the @code{Stripe} object as a prop to the @code{<Shop/>}
+component, so we can call Stripe's @code{createToken()} function in
+@code{handleSubmit} to tokenize the user's card, so they can be
+charged.  Once we receive the tokenized card from Stripe, we are
+ready to charge it.
+
+@pindex Shop.js
+@cindex @file{injectStripe}
+@cindex @file{react-stripe-elements}
+@cindex @code{injectStripe(Shop)} function
+@float Listing,org41b9876
+@example
+1  // Shop.js
+2  import @{ injectStripe @} from 'react-stripe-elements'
+3  export default injectStripe(Shop)
+@end example
+@caption{Inject Stripe from react-stripe-elements}
+@end float
+
+@node POST Request to Stripe
+@subsection POST Request to Stripe
+
+@cindex POST request, credit card
+@cindex credit card, charge, POST request
+For now let's just keep it simple and charge the card by sending a
+@code{POST} request to @samp{https://api.stripe.com/v1/charges} with
+specifying the payment @code{source} (this is the token id), the charge
+@code{amount} (of the charge) and the @code{currency} as described in the
+Stripe API.
+
+@cindex API key, create restricted
+@cindex authorization
+@cindex Dashboard
+@cindex Developers menu
+We need to send the API key in the header for authorization. We
+can create a restricted API key on the dashboard in the
+@strong{Developers} menu. Set the permission for charges to ``Read and
+write'' as shown in @ref{org4c848f5}, below.
+
+@strong{Do not forget:. You should never use your swiss army Secret key
+on the client!}
+
+@float Figure,org4c848f5
+@image{img/Stripe-Dashboard-API-Key-Restricted,6in,,,png}
+@caption{Restricted API Key in the Dashboard Developers Menu}
+@end float
+
+@node Charge a Credit Card in @file{Shopjs}
+@subsection Charge a Credit Card in @file{Shop.js}
+
+@pindex Shop.js
+@cindex Shop component, charge credit card
+@cindex credit card, charge
+@cindex @file{axios}
+@cindex post, axios
+@cindex @code{props.stripe.createToken()}
+@example
+ 1  // Shop.js
+ 2  // ...
+ 3  const stripeAuthHeader = @{
+ 4    'Content-Type': 'application/x-www-form-urlencoded',
+ 5    'Authorization': `Bearer rk_test_xxxxxxxxxxxxxxxxxxxxxxxx`
+ 6  @}
+ 7  
+ 8  class Shop extends Component @{
+ 9    // ...
+10    handleSubmit(evt) @{
+11      evt.preventDefault()
+12      this.setState(@{fetching: true@})
+13      const cart = this.state.cart
+14  
+15      this.props.stripe.createToken().then((@{token@}) => @{
+16          const price =
+17             cart.banana * prices.banana + cart.cucumber * prices.cucumber
+18          axios.post(`https://api.stripe.com/v1/charges`,
+19          qs.stringify(@{
+20            source: token.id,
+21            amount: price,
+22            currency: 'usd'
+23          @}),
+24          @{ headers: stripeAuthHeader @})
+25          .then((resp) => @{
+26            this.setState(@{fetching: false@})
+27            alert(`Thank you for your purchase! You card has been charged with: \
+28              $@{(resp.data.amount / 100).toLocaleString('en-US',
+29              @{style: 'currency', currency: 'usd'@})@}`)
+30          @})
+31          .catch(error => @{
+32            this.setState(@{fetching: false@})
+33            console.log(error)
+34          @})
+35      @}).catch(error => @{
+36        this.setState(@{fetching: false@})
+37        console.log(error)
+38      @})
+39    @}
+40    // ...
+41  @}
+@end example
+
+@cindex testing
+@cindex international cards
+For testing purposes you can use these @uref{https://stripe.com/docs/testing#international-cards, international cards} provided by Stripe.
+
+@node Placing an Order With Stripe
+@chapter Placing an Order With Stripe
+
+@cindex products and orders
+@cindex orders and products
+Looks good; we can already create tokens from cards and charge them,
+but how should we know who bought what and where should we send the
+package?  Thats where products and orders come in.
+
+@cindex order, create
+@cindex server, set up
+@cindex API, expose to handle order
+@cindex webhook, to process order
+Implementing a simple charging method is a good start, but we will
+need to take it a step further to create orders. To do so, we have
+to set up a server and expose an API which handles those orders and
+accepts webhooks from Stripe to process them once they got paid.
+
+@menu
+* Set Up an Express Server::
+* Handle Orders on the Front End::
+@end menu
+
+@node Set Up an Express Server
+@section Set Up an Express Server
+
+@cindex express server, set up
+@cindex routes, API
+@cindex @command{npm}
+@cindex back end
+@cindex node packages, other needed
+@cindex @file{express}
+@cindex @file{body-parser}, node
+@cindex @file{cors}, node
+@cindex @file{helmet}, node
+We will use @uref{https://expressjs.com/, express} to handle the routes of our API. You can find a
+list below of a couple of other node packages to get started. Let's
+create a new root folder and get started.
+@example
+npm install express stripe body-parser cors helmet
+@end example
+
+@cindex CORS
+@cindex Helmet
+@cindex security headers
+@cindex headers, security
+The skeleton is a simple express ``Hello World'' using @uref{https://www.npmjs.com/package/cors, CORS} so that
+the browser won't panic when we try to reach our PI server that
+resides and @uref{https://www.npmjs.com/package/helmet, Helmet} to set a bunch of security headers automatically
+for us.
+
+@pindex index.js
+@cindex server code, skeleton
+@float Listing,org99e7a66
+@example
+ 1  // index.js
+ 2  const express = require('express')
+ 3  const helmet = require('helmet')
+ 4  const cors = require('cors')
+ 5  const app = express()
+ 6  const port = 3001
+ 7  
+ 8  app.use(helmet())
+ 9  
+10  app.use(cors(@{
+11    origin: [/http:\/\/localhost:\d+$/],
+12    allowedHeaders: ['Content-Type', 'Authorization'],
+13    credentials: true
+14  @}))
+15  
+16  app.get('/api/', (req, res) => res.send(@{ version: '1.0' @}))
+17  
+18  app.listen(port, () => console.log(`Example app listening on port $@{port@}!`))
+@end example
+@caption{Initial Framework for Server @code{index.js}}
+@end float
+
+@menu
+* Access Stripe in Server @code{index.js}: Access Stripe in Server @code{indexjs}. 
+* Stripe Customers::
+* Use Card Token as @samp{Source}::
+* Implement CC Charges in @code{index.js}: Implement CC Charges in @code{indexjs}. 
+@end menu
+
+@node Access Stripe in Server @code{indexjs}
+@subsection Access Stripe in Server @code{index.js}
+
+@cindex @file{index.js}
+@cindex Stripe, access from server
+@cindex secret key
+@cindex Dashboard Developers API keys
+@cindex @code{stripe.orders.create()} function
+In order to access Stripe, @code{require} @file{Stripe.js} and
+call it straight away with your Secret Key (you can find it in
+@samp{dashboard->Developers->Api keys}), we will use
+@code{stripe.orders.create()} for passing the data we receive when the
+client calls our server to place an order.
+
+@node Stripe Customers
+@subsection Stripe Customers
+
+@cindex Stripe Customer
+@cindex charge a customer
+@cindex @samp{Source}
+@cindex Card Token ID
+The orders will not be paid automatically. To charge the customer
+we can either use a @samp{Source} directly such as a @strong{Card Token ID} or
+we can create a @uref{https://stripe.com/docs/api/customers/create, Stripe Customer}.
+
+@cindex Stripe Customer, benefit of using
+@cindex charges, multiple
+@cindex charges, recurring
+@cindex data, store on Stripe
+The added benefit of creating a Stripe customer is that we can
+track multiple charges, or create recurring charges for them and
+also instruct Stripe to store the shipping data and other
+necessary information to fulfill the order.
+
+@cindex Customer, create
+@cindex Card Token
+@cindex data, shipping
+@cindex discount
+@cindex single click shopping
+@cindex list orders
+@cindex orders, list on UI
+You probably want to create Customers from Card Tokens and
+shipping data even when your application already handles
+users. This way you can attach permanent or seasonal discount to
+those Customers, allow them to shop any time with a single click
+and @uref{https://stripe.com/docs/api/orders/list, list their orders} on your UI.
+
+@node Use Card Token as @samp{Source}
+@subsection Use Card Token as @samp{Source}
+
+@cindex Card Token
+@cindex @samp{Source}
+@cindex @code{stripe.orders.pay()} function
+For now let's keep it simple anyway and use the Card Token as our
+@samp{Source} calling @code{stripe.orders.pay()} once the order is
+successfully created.
+
+@cindex separate order from payment
+@cindex endpoints, different for order and payment
+In a real-world scenario, you probably want to separate the order
+creation from payment by exposing them on different endpoints, so
+if the payment fails the Client can try again later without having
+to recreate the order. However, we still have a lot to cover, so
+let's not overcomplicate things.
+
+@node Implement CC Charges in @code{indexjs}
+@subsection Implement CC Charges in @code{index.js}
+
+@pindex index.js
+@cindex post, order
+@cindex create Stripe order
+@cindex order, create Stripe
+@float Listing,org0e248cf
+@example
+ 1  // index.js
+ 2  const stripe = require('stripe')('sk_test_xxxxxxxxxxxxxxxxxxxxxx')
+ 3  
+ 4  app.post('/api/shop/order', async (req, res) => @{
+ 5    const order = req.body.order
+ 6    const source = req.body.source
+ 7    try @{
+ 8      const stripeOrder = await stripe.orders.create(order)
+ 9      console.log(`Order created: $@{stripeOrder.id@}`)
+10      await stripe.orders.pay(stripeOrder.id, @{source@})
+11    @} catch (err) @{
+12      // Handle stripe errors here: No such coupon, sku, ect
+13      console.log(`Order error: $@{err@}`)
+14      return res.sendStatus(404)
+15    @}
+16    return res.sendStatus(200)
+17  @})
+@end example
+@caption{App Post Function}
+@end float
+
+@node Handle Orders on the Front End
+@section Handle Orders on the Front End
+
+@cindex front end, order handling
+@cindex UI, order handling
+@cindex orders, handle on the UI
+Now we're able to handle orders on the backend, but we also need
+to implement this on the UI.
+
+@menu
+* Implement State of Shop Component::
+* Create Input Fields::
+* Create Products and Assign SKUs::
+* Add Products to the Webshop::
+* Send Orders to Stripe API on Submit::
+* Create a Coupon for Testing::
+@end menu
+
+@node Implement State of Shop Component
+@subsection Implement State of Shop Component
+
+@cindex state, implement Shop Component
+@cindex object, state
+@cindex Stripe API
+@cindex API
+@cindex Shop component
+@cindex Shop object
+First, let's implement the state of the @code{<Shop/>} as an object the
+Stripe API expects.
+
+@cindex order request, should look like
+@cindex address object
+@cindex fields, address object
+@cindex coupon
+You can find out how an order request should look like @uref{https://stripe.com/docs/api/orders/create, here}. We'll
+need an @samp{address} object with @samp{line1}, @samp{city}, @samp{state}, @samp{country},
+@samp{postal_code} fields, a @samp{name}, an @samp{email} and a @samp{coupon} field,
+to get our customers ready for coupon hunting.
+
+@pindex Shop.js
+@example
+ 1  // Shop.js
+ 2  class Shop extends Component @{
+ 3    constructor(props) @{
+ 4      super(props)
+ 5      this.state = @{
+ 6        fetching: false,
+ 7        cart: @{
+ 8          banana: 0,
+ 9          cucumber: 0
+10        @},
+11        coupon: '',
+12        email: '',
+13        name: '',
+14        address : @{
+15          line1: '',
+16          city: '',
+17          state: '',
+18          country: '',
+19          postal_code: ''
+20        @}
+21      @}
+22      this.handleCartChange = this.handleCartChange.bindthis)
+23      this.handleCartReset = this.handleCartReset.bind(this)
+24      this.handleAddressChange = this.handleAddressChange.bind(this)
+25      this.handleChange = this.handleChange.bind(this)
+26      this.handleSubmit = this.handleSubmit.bind(this)
+27    @}
+28  
+29    handleChange(evt) @{
+30      evt.preventDefault()
+31      this.setState(@{[evt.target.name]: evt.target.value@})
+32    @}
+33  
+34    handleAddressChange(evt) @{
+35      evt.preventDefault()
+36      const address = this.state.address
+37      address[evt.target.name] = evt.target.value
+38      this.setState(@{address@})
+39    @}
+40    // ...
+41  @}
+@end example
+
+@node Create Input Fields
+@subsection Create Input Fields
+
+@cindex input fields, create
+@cindex submit button, disable
+Now we are ready to create the input fields. We should, of course,
+disable the submit button when the input fields are empty. Just
+the usual deal.
+
+@pindex Shop.js
+@example
+ 1  // Shop.js
+ 2  render () @{
+ 3    const state = this.state
+ 4    const fetching = state.fetching
+ 5    const cart = state.cart
+ 6    const address = state.address
+ 7    const submittable =
+ 8       (cart.banana !== 0 || cart.cucumber !== 0) &&
+ 9       state.email &&
+10       state.name &&
+11       address.line1 &&
+12       address.city &&
+13       address.state &&
+14       address.country &&
+15       address.postal_code
+16    return (
+17  // ...
+18      <div>
+19         Name: <input type="text" name="name"
+20         onChange=@{this.handleChange@}/>
+21      </div>
+22      <div>
+23         Email: <input  type="text" name="email"
+24         onChange=@{this.handleChange@}/>
+25      </div>
+26      <div>
+27         Address Line: <input  type="text" name="line1"
+28         onChange=@{this.handleAddressChange@}/>
+29      </div>
+30      <div>
+31         City: <input  type="text" name="city"
+32         onChange=@{this.handleAddressChange@}/>
+33      </div>
+34      <div>
+35         State: <input  type="text" name="state"
+36         onChange=@{this.handleAddressChange@}/>
+37      </div>
+38      <div>
+39         Country: <input  type="text" name="country"
+40         onChange=@{this.handleAddressChange@}/>
+41      </div>
+42      <div>
+43         Postal Code: <input  type="text" name="postal_code"
+44         onChange=@{this.handleAddressChange@}/>
+45      </div>
+46      <div>
+47         Coupon Code: <input  type="text" name="coupon"
+48         onChange=@{this.handleChange@}/>
+49      </div>
+50      @{!fetching
+51        ? <button type="submit" disabled=@{!submittable@}>Purchase</button>
+52        : 'Purchasing...'@}
+53  // ...
+@end example
+
+@cindex purchasable items, define
+@cindex Stock Keeping Unit (SKU)
+@cindex SKU, define in Stripe
+@cindex Dashboard, define SKU in Stripe
+We also have to define purchasable items.  These items will be
+identified by a @uref{https://en.wikipedia.org/wiki/Stock_keeping_unit, Stock Keeping Unit} by Stripe, which can be created
+on the dashboard as well.
+
+@node Create Products and Assign SKUs
+@subsection Create Products and Assign SKUs
+
+@cindex products, create
+@cindex SKU, assign
+@cindex Inventory group
+@cindex Dashboard
+First, we have to create the Products (@samp{Banana} and @samp{Cucumber} on
+@samp{dashboard->Orders->Products}) and then assign an SKU to them
+(click on the created product and @samp{Add SKU} in the @strong{Inventory}
+group). An SKU specifies the products including its properties -
+size, color, quantity, and prices -, so a product can have
+multiple SKUs.
+
+@float Figure,orgfccb914
+@image{img/stripe-payments-dashboard-banana-product-creation,6in,,,png}
+@caption{Create a Product}
+@end float
+
+@float Figure,org0ca4dc3
+@image{img/Stripe-Payments-Dashboard-Stock-Keeping-Unit,6in,,,png}
+@caption{Create a SKU}
+@end float
+
+@node Add Products to the Webshop
+@subsection Add Products to the Webshop
+
+@cindex Webshop, add products to
+@cindex parse order
+@cindex order, parse
+After we created our products and assigned SKUs to them, we add
+them to the webshop so we can parse up the order.
+
+@pindex Shop.js
+@example
+1  // Shop.js
+2  const skus = @{
+3    banana: 1,
+4    cucumber: 2
+5  @}
+@end example
+
+@node Send Orders to Stripe API on Submit
+@subsection Send Orders to Stripe API on Submit
+
+@cindex orders, send
+@cindex send orders
+@cindex API, send orders to
+@cindex total price of orders, automatic calculation
+We are ready to send orders to our express API on submit. We do
+not have to calculate the total price of orders from now
+on. Stripe can sum it up for us, based on the SKUs, quantities,
+and coupons.
+
+@pindex Shop.js
+@cindex post, axios
+@cindex order, send in code
+@example
+ 1  // Shop.js
+ 2  handleSubmit(evt) @{
+ 3    evt.preventDefault()
+ 4    this.setState(@{fetching: true@})
+ 5    const state = this.state
+ 6    const cart = state.cart
+ 7  
+ 8    this.props.stripe.createToken(@{name: state.name@}).then((@{token@}) => @{
+ 9      // Create order
+10      const order = @{
+11        currency: 'usd',
+12        items: Object.keys(cart).filter((name) => cart[name] > 0
+13           ? true : false).map(name => @{
+14          return @{
+15            type: 'sku',
+16            parent: skus[name],
+17            quantity: cart[name]
+18          @}
+19        @}),
+20        email: state.email,
+21        shipping: @{
+22          name: state.name,
+23          address: state.address
+24        @}
+25      @}
+26      // Add coupon if given
+27      if (state.coupon) @{
+28        order.coupon = state.coupon
+29      @}
+30      // Send order
+31      axios.post(`http://localhost:3001/api/shop/order`, @{order, source: token.id@})
+32      .then(() => @{
+33        this.setState(@{fetching: false@})
+34        alert(`Thank you for your purchase!`)
+35      @})
+36      .catch(error => @{
+37        this.setState(@{fetching: false@})
+38        console.log(error)
+39      @})
+40    @}).catch(error => @{
+41      this.setState(@{fetching: false@})
+42      console.log(error)
+43    @})
+44  @}
+@end example
+
+@node Create a Coupon for Testing
+@subsection Create a Coupon for Testing
+
+@cindex coupon, create
+@cindex testing
+@cindex Dashboard
+@cindex Billing menu, Dashboard
+@cindex Coupons tab, Dashboard
+Let's create a coupon for testing purposes. This can be done on
+the dashboard as well. You can find this option under the
+@strong{Billing} menu on the @strong{Coupons} tab.
+
+@cindex coupons, multiple types
+@cindex coupons, duration
+@cindex coupons, attached to Customers
+There are multiple types of coupons based on their duration, but
+only coupons with the type @emph{Once} can be used for orders. The rest
+of the coupons can be attached to Stripe Customers.
+
+@cindex coupon, parameters
+You can also specify a lot of parameters for the coupon you
+create, such as how many times it can be used, whether it is
+amount based or percentage based, and when will the coupon
+expire. Now we need a coupon that can be used only once and
+provides a reduction on the price by a certain amount.
+
+@float Figure,orgbfd1f5d
+@image{img/Stripe-Payments-Dashboard-Coupon-Creation,6in,,,png}
+@caption{Dashboard Coupon Creation}
+@end float
+
+@cindex webhooks, set up
+Great! Now we have our products, we can create orders, and we can
+also ask Stripe to charge the customer's card for us. But we are
+still not ready to ship the products as we have no idea at the
+moment whether the charge was successful. To get that information,
+we need to set up @emph{webhooks}, so Stripe can let us know when the
+money is on its way.
+
+@float Figure,orgb82e170
+@image{img/Stripe-Payments-Shop-Orders,6in,,,png}
+@caption{Stripe Payments Shop Orders}
+@end float
+
+@node Setting up Stripe Webhooks to Verify Payments
+@chapter Setting up Stripe Webhooks to Verify Payments
+
+@cindex Source, assigned to customers
+@cindex Stripe payment methods
+@cindex payment methods, several on Stripe
+As we discussed earlier, we are not assigning cards but Sources to
+Customers. The reason behind that is Stripe is capable of using
+@uref{https://stripe.com/docs/sources, several payment methods}, some of which may take days to be verified.
+
+@cindex endpoint for Stripe to call on event
+@cindex webhooks, usefulness
+We need to set up an endpoint Stripe can call when an event --- such
+as a successful payment --- has happened. Webhooks are also useful
+when an event is not initiated by us via calling the API, but comes
+straight from Stripe.
+
+@cindex subscription service
+@cindex recurring payments, webhook for
+@cindex webhook for recurring payment
+Imagine that you have a subscription service, and you don't want to
+charge the customer every month. In this case, you can set up a
+webhook, and you will get notified when the recurring payment was
+successful or if it failed.
+
+@menu
+* Webhook Notification When Order Gets Paid::
+@end menu
+
+@node Webhook Notification When Order Gets Paid
+@section Webhook Notification When Order Gets Paid
+
+@cindex notification upon payment, webhook for
+@cindex webhook for notification of payment
+@cindex API endpoint for webhook notification
+@cindex ngrok service
+@cindex static ip, ngrok
+In this example, we only want to be notified when an order gets
+paid. When it happens, Stripe can notify us by calling an endpoint
+on our API with an HTTP request containing the payment data in the
+request body. At the moment, we don't have a static IP, but we need
+a way to expose our local API to the public internet. We can use
+@uref{https://ngrok.com/download, Ngrok} for that. Just download it and run with @code{./ngrok http 3001}
+command to get an ngrok url pointing to our @code{localhost:3001}.
+
+@menu
+* Webhook Setup using Stripe Dashboard::
+* Decrypting Request Body Sent by Stripe::
+@end menu
+
+@node Webhook Setup using Stripe Dashboard
+@subsection Webhook Setup using Stripe Dashboard
+
+@cindex Dashboard, webhook integration
+@cindex Developers Dashboard Webhooks
+@cindex Webhooks Developers Dashboard
+@cindex endpoint, add to Dashboard
+@cindex Add Endpoint, Webhooks
+@cindex ngrok endpoint, add
+We also have to set up our webhook on the Stripe dashboard. Go to
+@strong{Developers -> Webhooks}, click on @samp{Add endpoint} and type in your
+ngrok url followed by the endpoint to be called
+e.g. @samp{http://92832de0.ngrok.io/api/shop/order/process}. Then under
+@strong{Filter event} select @samp{Select types to send} and search for
+@code{order.payment_succeeded}.
+
+@float Figure,org314fd49
+@image{img/Stripe-Dashboard-Webhook-Creation,6in,,,png}
+@caption{Stripe Dashboard Webhook Creation}
+@end float
+
+@node Decrypting Request Body Sent by Stripe
+@subsection Decrypting Request Body Sent by Stripe
+
+@cindex decrypt request body
+@cindex webhook secret
+@cindex secret, webhook
+@cindex Dashboard, webhooks
+The data sent in the request body is encrypted and can only be
+decrypted by using a signature sent in the header and with the
+webhook secret that can be found on the webhooks dashboard.
+
+@cindex @file{bodyParser}, exception to
+@cindex @code{stripe.webhooks.constructEvent()} function
+@cindex message, decrypt using Stripe SDK
+@cindex decrypt message using Stripe SDK
+@cindex process orders, endpoint for, @file{/api/shop/order/process}
+This also means that we cannot simply use @code{bodyParser} to parse
+the body, so we need to add an exception to @code{bodyParser} so it
+will be bypassed when the URL starts with
+@samp{/api/shop/order/process}. We need to use the
+@code{stripe.webhooks.constructEvent()} function instead, provided by
+the Stripe SDK to decrypt the message for us.
+
+@pindex index.js
+@example
+ 1  // index.js
+ 2  const bodyParser = require('body-parser')
+ 3  
+ 4  app.use(bodyParser.json(@{
+ 5    verify: (req, res, buf) => @{
+ 6      if (req.originalUrl.startsWith('/api/shop/order/process')) @{
+ 7        req.rawBody = buf.toString()
+ 8      @}
+ 9    @}
+10  @}))
+11  
+12  app.use(bodyParser.urlencoded(@{
+13    extended: false
+14  @}))
+15  
+16  app.post('/api/shop/order/process', async (req, res) => @{
+17    const sig = req.headers['stripe-signature']
+18    try @{
+19      const event = await
+20         stripe.webhooks.
+21         constructEvent(req.rawBody, sig, 'whsec_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+22      console.log(`Processing Order : $@{event.data.object.id@}`)
+23      // Process payed order here
+24    @} catch (err) @{
+25      return res.sendStatus(500)
+26    @}
+27    return res.sendStatus(200)
+28  @})
+@end example
+
+@cindex Salesforce API
+@cindex Stamps API
+After an order was successfully paid, we can parse and send it to
+other APIs like Salesforce or Stamps to pack things up and get
+ready to send out.
+
+@node Wrapping It Up
+@chapter Wrapping It Up
+
+My goal with this guide was to provide help to you through the
+process of creating a Stripe-based webshop using JavaScript. I hope
+you did learn from our experiences and will use this guide when you
+decide to implement a similar system like this in the future.
+
+In case you need help with Stripe-based webshops, or Node & React
+development in general, feel free to reach out to us on
+@email{info@@risingstack.com}.
+
+@node LIST OF FIGURES
+@unnumbered LIST OF FIGURES
+
+@listoffloats Figure
+
+@node LIST OF CODE FRAGMENTS
+@unnumbered LIST OF CODE FRAGMENTS
+
+@listoffloats Listing
+
+@node CONCEPT INDEX
+@unnumbered CONCEPT INDEX
+
+@printindex cp
+
+@node SOURCE INDEX
+@unnumbered SOURCE INDEX
+
+@printindex pg
+
+@bye
