@@ -106,7 +106,8 @@ with Stripe Payments integration as a JavaScript developer.
 * Creating a Webshop in React with Charges
 
   #+CINDEX:webshop creation
-  Let’s create a React webshop with two products: a Banana and
+  #+CINDEX:React app
+  Let’s create a React Webshop with two products: a Banana and
   Cucumber. What else would you want to buy in a webshop anyways,
   right?
 
@@ -132,13 +133,19 @@ with Stripe Payments integration as a JavaScript developer.
     API.
 
 
+  #+CINDEX:credit card details, raw
+  #+CINDEX:credit card security
   *WARNING:* You should never send raw credit card details to your
   own API, but let Stripe handle the credit card security for you.
 
   #+CINDEX: token, from Stripe
+  #+CINDEX:credit card identification
   You will be able to identify the card provided by the user using
   the token you got from Stripe.
 
+  #+CINDEX:Stripe Dashboard
+  #+CINDEX:Dashboard, Stripe
+  #+CINDEX:API key, Stripe Dashboard
   #+ATTR_HTML: :width 75%
   #+ATTR_TEXINFO: :alt Stripe Dashboard API Key :width 6in
   #+NAME: fig:stripe-api
@@ -147,32 +154,52 @@ with Stripe Payments integration as a JavaScript developer.
 
 ** Terminal Commands To Build the React App
 
-    #+BEGIN_SRC bash -n
-    npx create-react-app webshop
-    cd webshop
-    npm install --save react-stripe-elements
-    npm install --save axios
-    npm install --save query-string-object
-    #+END_SRC
+*** Create the React App and Install Stripe Elements and Axios
 
+   #+CINDEX:@file{webshop}
+   #+CINDEX:front end
+   #+CINDEX:React
+   #+CINDEX:@command{create-react-app}
+   #+CINDEX:@command{npx}
+   #+CINDEX:@command{npm install}
+   #+CINDEX:@file{axios}
+   #+CINDEX:@file{query-string-object}
+   #+PINDEX:create-script
+   #+NAME:src:create
+   #+CAPTION:Create the Webshop Front End
+   #+BEGIN_SRC bash -n
+npx create-react-app webshop
+cd webshop
+npm install --save react-stripe-elements
+npm install --save axios
+npm install --save query-string-object
+   #+END_SRC
+
+*** Add ~Stripe.js~ Code to ~index.html~ File
+
+    #+CINDEX:@file{Stripe.js}
+    #+CINDEX:@file{index.html}
+    #+CINDEX:@samp{<script>...</script>}
     After we’re done with the preparations, we have to include
-    {{{file(Stripe.js)}}} in our application.  Just add ~<script
-    src="https://js.stripe.com/v3/"></script>~ to the head of your
-    {{{file(index.html)}}}.
+    {{{file(Stripe.js)}}} in our application.  Just add
+    : <script src="https://js.stripe.com/v3/"></script>
+    {{{noindent}}}to the head of your {{{file(index.html)}}}.
 
 ** Coding the App
 
-*** Root React Component {{{file(App.js)}}}
+*** Stripe Object in Root React Component {{{file(App.js)}}}
 
     #+CINDEX:StripeProvider component
     #+CINDEX:~react-stripe-elements~
     #+CINDEX:root react component
+    #+CINDEX:react root component
     #+CINDEX:@file{App.js}
     First, we have to add a ~<StripeProvider/>~ from
     ~react-stripe-elements~ to our root React App component.
 
     #+CINDEX:Stripe object
     #+CINDEX:props
+    #+CINDEX:react props
     #+CINDEX:public access key
     #+CINDEX:access key, public
     #+CINDEX:key, public access
@@ -183,40 +210,49 @@ with Stripe Payments integration as a JavaScript developer.
     #+CINDEX:Dashboard menu
     #+CINDEX:Publishable key
     This will give us access to the [[https://stripe.com/docs/stripe-js/reference#the-stripe-object][Stripe object]].  In the props, we
-    should pass a public access key (~apiKey~) which is found in the
+    should pass a *public access key* (~apiKey~) which is found in the
     dashboard's *Developers* section under the /API keys/ menu as
     /Publishable key/. ([[fig:stripe-api]])
 
-    #+NAME:code:stripeprovider
+    #+PINDEX:App.js
+    #+CINDEX:@file{react-stripe-elements}
+    #+CINDEX:@file{Elements}
+    #+CINDEX:@file{StripeProvider}
+    #+CINDEX:@code{apiKey}
+    #+NAME:src:stripeprovider
     #+CAPTION:~StripeProvider~ Component in Root Component
    #+BEGIN_SRC javascript -n
-   // App.js
-   import React from 'react'
-   import {StripeProvider, Elements} from 'react-stripe-elements'
-   import Shop from './Shop'
+// App.js
+import React from 'react'
+import {StripeProvider, Elements} from 'react-stripe-elements'
+import Shop from './Shop'
 
-   const App = () => {
-     return (
-       <StripeProvider apiKey="pk_test_xxxxxxxxxxxxxxxxxxxxxxxx">
-         <Elements>
-           <Shop/>
-         </Elements>
-       </StripeProvider>
-     )
-   }
+const App = () => {
+  return (
+    <StripeProvider apiKey="pk_test_xxxxxxxxxxxxxxxxxxxxxxxx">
+      <Elements>
+        <Shop/>
+      </Elements>
+    </StripeProvider>
+  )
+}
    #+END_SRC
 
    The ~<Shop/>~ is the implementation of our shop form as you can see
    from ~import Shop from './Shop'~.  We'll go into the details later.
 
-*** {{{file(Shop.js)}}} Component
+*** Implementation of {{{file(Shop.js)}}} Component
 
-   As you can see the ~<Shop/>~ is wrapped in ~<Elements>~ imported
-   from {{{file(react-stripe-elements)}}} so that you can use
-   ~injectStripe~ in your components. To shed some light on this,
-   let's take a look at our implementation in {{{file(Shop.js)}}}.
+    #+CINDEX:@file{Elements}
+    #+CINDEX:@code{injectStripe}
+    #+CINDEX:@file{Shop.js}
+    As you can see the ~<Shop/>~ is wrapped in ~<Elements>~ imported
+    from {{{file(react-stripe-elements)}}} so that you can use
+    ~injectStripe~ in your components. To shed some light on this,
+    let's take a look at our implementation in {{{file(Shop.js)}}}.
 
-#+BEGIN_SRC js -n
+    #+PINDEX:Shop.js
+    #+BEGIN_SRC js -n
  // Shop.js
 import React, { Component } from 'react'
 import { CardElement } from 'react-stripe-elements'
@@ -325,12 +361,14 @@ Shop.propTypes = {
     createToken: PropTypes.func.isRequired
   }).isRequired
 }
-#+END_SRC
+    #+END_SRC
 
 *** Explanation of {{{file(Shop.js)}}}
 
     {{{heading(Simple React Form)}}}
 
+    #+CINDEX:React form
+    #+CINDEX:form, React
     The ~Shop~ is a simple React form with purchasable elements:
     =Banana= and =Cucumber=, and with a quantity =increase/decrease=
     button for each. Clicking the buttons will change their respective
@@ -348,6 +386,12 @@ Shop.propTypes = {
 
     {{{heading(Stripe Form for Card Details: ~<CardElement/>~)}}}
 
+    #+CINDEX:Stripe, in React form
+    #+CINDEX:Stripe form element
+    #+CINDEX:credit card, details
+    #+CINDEX:@file{CardElement}
+    #+CINDEX:@file{react-stripe-elements}
+    #+CINDEX:css, form style
     Now comes the Stripe-specific part: we need to add a form element
     so users can enter their card details. To achieve this, we only
     need to add ~<CardElement/>~ from
@@ -357,6 +401,15 @@ Shop.propTypes = {
 
     {{{heading(Pass Sripe Object As Prop to the ~Shop~)}}}
 
+    #+CINDEX:@file{injectStripe} hoc
+    #+CINDEX:higher-order-component, @file{injectStripe}
+    #+CINDEX:Stripe object, as prop
+    #+CINDEX:Shop component
+    #+CINDEX:@code{createToken()} function
+    #+CINDEX:@code{handleSubmit}
+    #+CINDEX:credit card, tokenized
+    #+CINDEX:tokenize, credit card
+    #+CINDEX:credit card, charge
     We also need to use the ~injectStripe~ Higher-Order-Component in
     order to pass the ~Stripe~ object as a prop to the ~<Shop/>~
     component, so we can call Stripe's ~createToken()~ function in
@@ -364,18 +417,32 @@ Shop.propTypes = {
     charged.  Once we receive the tokenized card from Stripe, we are
     ready to charge it.
 
+    #+PINDEX:Shop.js
+    #+CINDEX:@file{injectStripe}
+    #+CINDEX:@file{react-stripe-elements}
+    #+CINDEX:@code{injectStripe(Shop)} function
+    #+NAME:src:injectStripe
+    #+CAPTION:Inject Stripe from react-stripe-elements
     #+BEGIN_SRC js -n
-    // Shop.js
-    import { injectStripe } from 'react-stripe-elements'
-    export default injectStripe(Shop)
+// Shop.js
+import { injectStripe } from 'react-stripe-elements'
+export default injectStripe(Shop)
     #+END_SRC
 
+*** POST Request to Stripe
+
+    #+CINDEX:POST request, credit card
+    #+CINDEX:credit card, charge, POST request
     For now let's just keep it simple and charge the card by sending a
     ~POST~ request to =https://api.stripe.com/v1/charges= with
     specifying the payment ~source~ (this is the token id), the charge
     ~amount~ (of the charge) and the ~currency~ as described in the
     Stripe API.
 
+    #+CINDEX:API key, create restricted
+    #+CINDEX:authorization
+    #+CINDEX:Dashboard
+    #+CINDEX:Developers menu
     We need to send the API key in the header for authorization. We
     can create a restricted API key on the dashboard in the
     *Developers* menu. Set the permission for charges to "Read and
@@ -390,50 +457,55 @@ Shop.propTypes = {
     #+CAPTION:Restricted API Key in the Dashboard Developers Menu
     [[file:img/Stripe-Dashboard-API-Key-Restricted.png]]
 
-*** {{{file(Shop.js)}}} In Action
+*** Charge a Credit Card in {{{file(Shop.js)}}}
 
+    #+PINDEX:Shop.js
+    #+CINDEX:Shop component, charge credit card
+    #+CINDEX:credit card, charge
+    #+CINDEX:@file{axios}
+    #+CINDEX:post, axios
     #+BEGIN_SRC js -n
-    // Shop.js
-    // ...
-    const stripeAuthHeader = {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': `Bearer rk_test_xxxxxxxxxxxxxxxxxxxxxxxx`
-    }
+// Shop.js
+// ...
+const stripeAuthHeader = {
+  'Content-Type': 'application/x-www-form-urlencoded',
+  'Authorization': `Bearer rk_test_xxxxxxxxxxxxxxxxxxxxxxxx`
+}
 
-    class Shop extends Component {
-      // ...
-      handleSubmit(evt) {
-        evt.preventDefault()
-        this.setState({fetching: true})
-        const cart = this.state.cart
+class Shop extends Component {
+  // ...
+  handleSubmit(evt) {
+    evt.preventDefault()
+    this.setState({fetching: true})
+    const cart = this.state.cart
 
-        this.props.stripe.createToken().then(({token}) => {
-            const price =
-               cart.banana * prices.banana + cart.cucumber * prices.cucumber
-            axios.post(`https://api.stripe.com/v1/charges`,
-            qs.stringify({
-              source: token.id,
-              amount: price,
-              currency: 'usd'
-            }),
-            { headers: stripeAuthHeader })
-            .then((resp) => {
-              this.setState({fetching: false})
-              alert(`Thank you for your purchase! You card has been charged with: \
-                ${(resp.data.amount / 100).toLocaleString('en-US',
-                {style: 'currency', currency: 'usd'})}`)
-            })
-            .catch(error => {
-              this.setState({fetching: false})
-              console.log(error)
-            })
-        }).catch(error => {
+    this.props.stripe.createToken().then(({token}) => {
+        const price =
+           cart.banana * prices.banana + cart.cucumber * prices.cucumber
+        axios.post(`https://api.stripe.com/v1/charges`,
+        qs.stringify({
+          source: token.id,
+          amount: price,
+          currency: 'usd'
+        }),
+        { headers: stripeAuthHeader })
+        .then((resp) => {
+          this.setState({fetching: false})
+          alert(`Thank you for your purchase! You card has been charged with: \
+            ${(resp.data.amount / 100).toLocaleString('en-US',
+            {style: 'currency', currency: 'usd'})}`)
+        })
+        .catch(error => {
           this.setState({fetching: false})
           console.log(error)
         })
-      }
-      // ...
-    }
+    }).catch(error => {
+      this.setState({fetching: false})
+      console.log(error)
+    })
+  }
+  // ...
+}
     #+END_SRC
 
     For testing purposes you can use these [[https://stripe.com/docs/testing#international-cards][international cards]] provided by Stripe.
@@ -444,23 +516,45 @@ Shop.propTypes = {
 
 * Placing an Order With Stripe
 
+  #+CINDEX:order, create
+  #+CINDEX:server, set up
+  #+CINDEX:API, expose to handle order
+  #+CINDEX:webhook, to process order
   Implementing a simple charging method is a good start, but we will
   need to take it a step further to create orders. To do so, we have
   to set up a server and expose an API which handles those orders and
   accepts webhooks from Stripe to process them once they got paid.
 
-  We will use [[https://expressjs.com/][express]] to handle the routes of our API. You can find a
-  list below of a couple of other node packages to get started. Let's
-  create a new root folder and get started.
-  : npm install express stripe body-parser cors helmet
+** Set Up an Express Server
 
-  The skeleton is a simple express "Hello World" using [[https://www.npmjs.com/package/cors][CORS]] so that the
-  browser won't panic when we try to reach our PI server that resides
-  and [[https://www.npmjs.com/package/helmet][Helmet]] to set a bunch of security headers automatically for us.
+   #+CINDEX:express server, set up
+   #+CINDEX:routes, API
+   #+CINDEX:@command{npm}
+   #+CINDEX:back end
+   #+CINDEX:node packages, other needed
+   #+CINDEX:@file{express}
+   #+CINDEX:@file{body-parser}, node
+   #+CINDEX:@file{cors}, node
+   #+CINDEX:@file{helmet}, node
+   We will use [[https://expressjs.com/][express]] to handle the routes of our API. You can find a
+   list below of a couple of other node packages to get started. Let's
+   create a new root folder and get started.
+   : npm install express stripe body-parser cors helmet
 
-  #+NAME:src:index.js-app
-  #+CAPTION:Initial Framework for App ~index.js~
-  #+BEGIN_SRC js -n
+   #+CINDEX:CORS
+   #+CINDEX:Helmet
+   #+CINDEX:security headers
+   #+CINDEX:headers, security
+   The skeleton is a simple express "Hello World" using [[https://www.npmjs.com/package/cors][CORS]] so that
+   the browser won't panic when we try to reach our PI server that
+   resides and [[https://www.npmjs.com/package/helmet][Helmet]] to set a bunch of security headers automatically
+   for us.
+
+   #+PINDEX:index.js
+   #+CINDEX:server code, skeleton
+   #+NAME:src:index.js-server
+   #+CAPTION:Initial Framework for Server ~index.js~
+   #+BEGIN_SRC js -n
 // index.js
 const express = require('express')
 const helmet = require('helmet')
@@ -479,43 +573,80 @@ app.use(cors({
 app.get('/api/', (req, res) => res.send({ version: '1.0' }))
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
-  #+END_SRC
+   #+END_SRC
 
-  In order to access Stripe, ~require~ {{{file(Stripe.js)}}} and call
-  it straight away with your Secret Key (you can find it in
-  =dashboard->Developers->Api keys=), we will use
-  ~stripe.orders.create()~ for passing the data we receive when the
-  client calls our server to place an order.
+*** Access Stripe in Server ~index.js~
 
-  The orders will not be paid automatically. To charge the customer we
-  can either use a =Source= directly such as a *Card Token ID* or we can
-  create a [[https://stripe.com/docs/api/customers/create][Stripe Customer]].
+    #+CINDEX:@file{index.js}
+    #+CINDEX:Stripe, access from server
+    #+CINDEX:secret key
+    #+CINDEX:Dashboard Developers API keys
+    #+CINDEX:@code{stripe.orders.create()} function
+    In order to access Stripe, ~require~ {{{file(Stripe.js)}}} and
+    call it straight away with your Secret Key (you can find it in
+    =dashboard->Developers->Api keys=), we will use
+    ~stripe.orders.create()~ for passing the data we receive when the
+    client calls our server to place an order.
 
-  The added benefit of creating a Stripe customer is that we can track
-  multiple charges, or create recurring charges for them and also
-  instruct Stripe to store the shipping data and other necessary
-  information to fulfill the order.
+*** Stripe Customers
 
-  You probably want to create Customers from Card Tokens and shipping
-  data even when your application already handles users. This way you
-  can attach permanent or seasonal discount to those Customers, allow
-  them to shop any time with a single click and [[https://stripe.com/docs/api/orders/list][list their orders]] on
-  your UI.
+    #+CINDEX:Stripe Customer
+    #+CINDEX:charge a customer
+    #+CINDEX:@samp{Source}
+    #+CINDEX:Card Token ID
+    The orders will not be paid automatically. To charge the customer
+    we can either use a =Source= directly such as a *Card Token ID* or
+    we can create a [[https://stripe.com/docs/api/customers/create][Stripe Customer]].
 
-  For now let's keep it simple anyway and use the Card Token as our
-  =Source= calling ~stripe.orders.pay()~ once the order is
-  successfully created.
+    #+CINDEX:Stripe Customer, benefit of using
+    #+CINDEX:charges, multiple
+    #+CINDEX:charges, recurring
+    #+CINDEX:data, store on Stripe
+    The added benefit of creating a Stripe customer is that we can
+    track multiple charges, or create recurring charges for them and
+    also instruct Stripe to store the shipping data and other
+    necessary information to fulfill the order.
 
-  In a real-world scenario, you probably want to separate the order
-  creation from payment by exposing them on different endpoints, so if
-  the payment fails the Client can try again later without having to
-  recreate the order. However, we still have a lot to cover, so let's
-  not overcomplicate things.
+    #+CINDEX:Customer, create
+    #+CINDEX:Card Token
+    #+CINDEX:data, shipping
+    #+CINDEX:discount
+    #+CINDEX:single click shopping
+    #+CINDEX:list orders
+    #+CINDEX:orders, list on UI
+    You probably want to create Customers from Card Tokens and
+    shipping data even when your application already handles
+    users. This way you can attach permanent or seasonal discount to
+    those Customers, allow them to shop any time with a single click
+    and [[https://stripe.com/docs/api/orders/list][list their orders]] on your UI.
 
-  #+NAME:src:index.js-post
-  #+CAPTION:App Post Function
-  #+BEGIN_SRC js -n
-/ index.js
+*** Use Card Token as =Source=
+
+    #+CINDEX:Card Token
+    #+CINDEX:@samp{Source}
+    #+CINDEX:@code{stripe.orders.pay()} function
+    For now let's keep it simple anyway and use the Card Token as our
+    =Source= calling ~stripe.orders.pay()~ once the order is
+    successfully created.
+
+    #+CINDEX:separate order from payment
+    #+CINDEX:endpoints, different for order and payment
+    In a real-world scenario, you probably want to separate the order
+    creation from payment by exposing them on different endpoints, so
+    if the payment fails the Client can try again later without having
+    to recreate the order. However, we still have a lot to cover, so
+    let's not overcomplicate things.
+
+*** Implement CC Charges in ~index.js~
+
+    #+PINDEX:index.js
+    #+CINDEX:post, order
+    #+CINDEX:create Stripe order
+    #+CINDEX:order, create Stripe
+    #+NAME:src:index.js-post
+    #+CAPTION:App Post Function
+    #+BEGIN_SRC js -n
+// index.js
 const stripe = require('stripe')('sk_test_xxxxxxxxxxxxxxxxxxxxxx')
 
 app.post('/api/shop/order', async (req, res) => {
@@ -532,18 +663,28 @@ app.post('/api/shop/order', async (req, res) => {
   }
   return res.sendStatus(200)
 })
-  #+END_SRC
+    #+END_SRC
 
-  Now we're able to handle orders on the backend, but we also need to
-  implement this on the UI.
+** Handle Orders on the Front End
 
-  First, let's implement the state of the ~<Shop/>~ as an object the
-  Stripe API expects.
+   #+CINDEX:front end, order handling
+   #+CINDEX:UI, order handling
+   #+CINDEX:orders, handle on the UI
+   Now we're able to handle orders on the backend, but we also need
+   to implement this on the UI.
 
-  You can find out how an order request should look like [[https://stripe.com/docs/api/orders/create][here]]. We'll
-  need an =address= object with =line1=, =city=, =state=, =country=,
-  =postal_code= fields, a =name=, an =email= and a =coupon= field, to
-  get our customers ready for coupon hunting.
+*** Implement State of Shop Component
+
+    #+CINDEX:state, implement Shop Component
+    #+CINDEX:object, state
+    First, let's implement the state of the ~<Shop/>~ as an object the
+    Stripe API expects.
+
+    #+CINDEX:order request, should look
+    You can find out how an order request should look like [[https://stripe.com/docs/api/orders/create][here]]. We'll
+    need an =address= object with =line1=, =city=, =state=, =country=,
+    =postal_code= fields, a =name=, an =email= and a =coupon= field,
+    to get our customers ready for coupon hunting.
 
   #+BEGIN_SRC js -n
 // Shop.js
@@ -880,16 +1021,21 @@ app.post('/api/shop/order/process', async (req, res) => {
   :UNNUMBERED:
   :END:
   #+TEXINFO: @listoffloats Listing
-* INDEX
+* CONCEPT INDEX
   :PROPERTIES:
   :INDEX:    cp
   :END:
+* SOURCE INDEX
+  :PROPERTIES:
+  :INDEX:    pg
+  :END:
 * MACRO SETUP                                                      :noexport:
-#+MACRO: VERSION Version 0.0.3
-#+MACRO: CREATE-DATE Created 2019-01-31 Thu 19:20
+#+MACRO: VERSION Version 0.0.4
+#+MACRO: CREATE-DATE Created 2019-01-31 Thu 20:57
 #+MACRO: file @@texinfo:@file{@@$1@@texinfo:}@@
 #+MACRO: heading @@texinfo:@heading @@$1
 #+MACRO: subheading @@texinfo:@subheading @@$1
+#+MACRO: noindent @@texinfo:@noindent @@
 * TEXINFO EXPORT SETUP                                             :noexport:
 #+OPTIONS: ':t *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
 #+OPTIONS: author:t broken-links:nil c:nil creator:nil
